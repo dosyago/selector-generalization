@@ -115,8 +115,6 @@
             last_match_j = j;
             return lcs_read(s,x,y,i-1,j-1).concat([{'>':1},xy_intersection]);
           } else {
-            last_match_i = i;
-            last_match_j = j;
             return lcs_read(s,x,y,i-1,j-1).concat([xy_intersection]);
           }
         } else {

@@ -1,8 +1,469 @@
+  <nav 
+    style="
+      width:100%;
+      position:fixed;
+      z-index:3;
+    ">
+      <button id=generalize>Generalize</button>
+      <button id=clear>Clear</button>
+  </nav>
 <h1>Selector Generalization  Tests</h1>
-<div>
-  <a class=hat>Hat Link</a>
-  <a class=bat>Bat Link</a>
-</div>
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <h1>Dosy Look Demo</h1>
+  <h1>Paragraphs!</h1>
+  <ul>
+    <li><a href=panels.html>Panels demo 1: workspace</a>
+  </ul>
+  <p>
+    This is my paragraph. 
+    It contains <a href=#>my link.</a>
+  </p>
+  <p>
+    Here is my second paragraphy. It's a masterpiece.
+    It has this link to <a target=_blank href=https://youtu.be/KycsMsR9QRA>my video</a>, and also
+    it contains <a target=_blank href=/demos.html>this beautiful amazing link to my page of more specific HI elements.</a>
+  </p>
+  <p class=column2>
+    Here is my second paragraphy. It's a masterpiece.
+    It has this link to <a target=_blank href=https://youtu.be/KycsMsR9QRA>my video</a>, and also
+    it contains <a target=_blank href=/demos.html>this beautiful amazing link to my page of more specific HI elements.</a>
+  </p>
+  <p>
+    This is an abbreviation. Or rather, <abbr>DOSY</abbr> is.
+  </p>
+  <br>
+  <br>
+  <h1>Steps!</h1>
+  <nav class="tabs steps">
+    <form action=#>
+      <ul class="horizontal tabs steps">
+        <li>
+          <input id=s1t1 type=radio name=s1tabs value=t1 checked> 
+          <label for=s1t1>Step 1</label>
+          <article class="tab step">
+            <h1>I am Step 1</h1>
+            <label for=s1t2 class=next>Next step</label>
+          </article>
+        </li>
+        <li>
+          <input id=s1t2 type=radio name=s1tabs value=t2> 
+          <label for=s1t2>Step 2</label>
+          <article class="tab step">
+            <h1>I be Step 2</h1>
+            <label for=s1t3 class=next>Next step</label>
+          </article>
+        </li>
+        <li>
+          <input id=s1t3 type=radio name=s1tabs value=t3> 
+          <label for=s1t3>Step 3</label>
+          <article class="tab step">
+            <h1>I believe I am Step 3</h1>
+            <button>Submit</button>
+          </article>
+        </li>
+      </ul>
+    </form>
+  </nav>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <h1>Toggle!</h1>
+  <p>
+    <span class="widget toggle">
+      <input type=radio name=toggle value=off id=t_off class=off checked>
+      <input type=radio name=toggle value=on id=t_on class=on>
+      <label for=t_on>Toggle</label>
+      <label for=t_off>Toggle</label>
+      <span class="option off">
+        <label for=t_off>Off</label>
+      </span>
+      <span class="option on">
+        <label for=t_on>On</label>
+      </span>
+    </span>
+  </p>
+  <br>
+  <br>
+  <h1>Sticky!</h1>
+  <article class=sticky>
+    <h1>I am stricky</h1>
+  </article>
+  <br>
+  <br>
+  <h1>Tabs!</h1>
+    <nav class=tabs>
+      <ul class="horizontal tabs">
+        <li>
+          <input id=t1 type=radio name=tabs value=t1 checked> 
+          <label for=t1>Tab 1</label>
+          <article class=tab>
+            <h1>I am Tab 1</h1>
+          </article>
+        </li>
+        <li>
+          <input id=t2 type=radio name=tabs value=t2> 
+          <label for=t2>Tab 2</label>
+          <article class=tab>
+            <h1>I be Tab 2</h1>
+          </article>
+        </li>
+        <li>
+          <input id=t3 type=radio name=tabs value=t3> 
+          <label for=t3>Tab 3</label>
+          <article class=tab>
+            <h1>I believe I am Tab 3</h1>
+          </article>
+        </li>
+      </ul>
+    </nav>
+  <br>
+  <br>
+  <h1>Accordion!</h1>
+  <h2>Radio Style Accordion</h2>
+  <nav>
+    <ul class="vertical accordion">
+      <li>
+        <input type=radio name=rdsmenu value=aboot_close id=aboot_close role=menuitemradio aria-haspopup=false> 
+        <input checked type=radio name=rdsmenu value=aboot id=aboot role=menuitemradio aria-haspopup=true>
+        <label for=aboot_close>About</label>
+        <label for=aboot>About</label>
+        <ul class=panel role=menu aria-label="About">
+          <li><a role=menuitem target=contentWindow href=/welcome>Welcome!</a></li>
+          <li><a role=menuitem target=contentWindow href=/technology>The value of technology</a></li>
+          <li><a role=menuitem target=contentWindow href=/directors>Company leadership</a></li>
+          <li><a role=menuitem target=contentWindow href=/visionvaluesbehaviour>Our vision, values and behaviour</a></li>
+          <li><a role=menuitem target=contentWindow href=/history>History</a></li>
+          <li><a role=menuitem target=contentWindow href=/locations>Locations</a></li>
+          <li><a role=menuitem target=contentWindow href=/faq>FAQ</a></li>
+        </ul>
+      </li>
+      <li>
+        <input type=radio name=rdsmenu value=pructs_close id=pructs_close role=menuitemradio aria-haspopup=false>
+        <input type=radio name=rdsmenu value=pructs id=pructs role=menuitemradio aria-haspopup=true>
+        <label for=pructs_close>Products</label>
+        <label for=pructs>Products</label>
+        <ul class=panel role=menu aria-label=Products>
+          <li><a role=menuitem target=contentWindow href=/projectant>Project Ant</a></li>
+          <li><a role=menuitem target=contentWindow href=/projecttelefn>Project Telefn</a></li>
+          <li><a role=menuitem target=contentWindow href=/projectpostcode>Project PostCode</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <br>
+  <br>
+  <h2>Checkbox Style Accordion</h2>
+  <nav>
+    <ul class="vertical accordion">
+      <li>
+        <input type=checkbox name=menu value=cabootg id=caboot role=menuitemcheckbox aria-haspopup=false checked>
+        <label for=caboot>About</label>
+        <ul class=panel role=menu aria-label="About">
+          <li><a role=menuitem target=contentWindow href=/welcome>Welcome!</a></li>
+          <li><a role=menuitem target=contentWindow href=/technology>The value of technology</a></li>
+          <li><a role=menuitem target=contentWindow href=/directors>Company leadership</a></li>
+          <li>
+            <input type=checkbox name=menu value=cabootg id=s1caboot role=menuitemcheckbox aria-haspopup=false checked>
+            <label for=s1caboot>About</label>
+            <ul class=panel role=menu aria-label="About">
+              <li><a role=menuitem target=contentWindow href=/welcome>Welcome!</a></li>
+              <li><a role=menuitem target=contentWindow href=/technology>The value of technology</a></li>
+              <li><a role=menuitem target=contentWindow href=/directors>Company leadership</a></li>
+              <li><a role=menuitem target=contentWindow href=/visionvaluesbehaviour>Our vision, values and behaviour</a></li>
+              <li><a role=menuitem target=contentWindow href=/history>History</a></li>
+              <li><a role=menuitem target=contentWindow href=/locations>Locations</a></li>
+              <li><a role=menuitem target=contentWindow href=/faq>FAQ</a></li>
+            </ul>
+          </li>
+          <li>
+            <input type=checkbox name=menu value=cpructsg id=s1cpructs role=menuitemcheckbox aria-haspopup=false >
+            <label for=s1cpructs>Products</label>
+            <ul class=panel role=menu aria-label=Products>
+              <li><a role=menuitem target=contentWindow href=/projectant>Project Ant</a></li>
+              <li><a role=menuitem target=contentWindow href=/projecttelefn>Project Telefn</a></li>
+              <li><a role=menuitem target=contentWindow href=/projectpostcode>Project PostCode</a></li>
+            </ul>
+          </li>
+          <li><a role=menuitem target=contentWindow href=/history>History</a></li>
+          <li><a role=menuitem target=contentWindow href=/locations>Locations</a></li>
+          <li><a role=menuitem target=contentWindow href=/faq>FAQ</a></li>
+        </ul>
+      </li>
+      <li>
+        <input type=checkbox name=menu value=cpructsg id=cpructs role=menuitemcheckbox aria-haspopup=false >
+        <label for=cpructs>Products</label>
+        <ul class=panel role=menu aria-label=Products>
+          <li><a role=menuitem target=contentWindow href=/projectant>Project Ant</a></li>
+          <li><a role=menuitem target=contentWindow href=/projecttelefn>Project Telefn</a></li>
+          <li><a role=menuitem target=contentWindow href=/projectpostcode>Project PostCode</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <br>
+  <br>
+  <h1>Modals!</h1>
+  <br>
+  <section class=modal>
+      <input type=radio name=modal_1 value=open id=modal_1>
+      <input type=radio name=modal_1 value=close id=modal_1_close checked>
+      <label for=modal_1>Modal 1</label>
+      <label for=modal_1_close>Close Modal 1</label>
+      <article>
+        <h1>I am a modal</h1>
+      </article>
+  </section>
+  <br>
+  <h1>Busy Indicators!</h1>
+  <div class="busy box_1"></div>
+  <br>
+  <br>
+  <div class="busy box_2"></div>
+  <br>
+  <br>
+  <div class="busy box_1 round"></div>
+  <br>
+  <br>
+  <div class="busy box_2 round"></div>
+  <br>
+  <br>
+  <h1>Forms!</h1>
+  <form action=#>
+    <fieldset>
+      <legend>This Is My Form</legend>
+      <p>
+        This is a form
+      </p>
+      <p>
+        <label for=texti>Text</label>
+        <input id=texti type=text spellcheck=off>
+      </p>
+      <p>
+        <label for=colori>Color Select</label>
+        <input id=colori type=color>
+      </p>
+      <p>
+        <label for=datetimei>Date & Time</label>
+        <input id=datetimei type=datetime-local>
+      </p>
+      <p>
+        <label for=filei>File Upload</label>
+        <input id=filei type=file>
+      </p>
+      <p>
+        <label for=numi>Number</label>
+        <input id=numi type=number>
+      </p>
+      <p>
+        <label for=datei>Date</label>
+        <input id=datei type=date>
+      </p>
+      <p>
+        <label for=timei>Time</label>
+        <input id=timei type=time>
+      </p>
+      <p>
+        <label for=rangei>Range</label>
+        <input id=range type=range>
+      </p>
+      <p>
+        <label for=selecti1>
+          Select
+        </label>
+        <select id=selecti1>
+          <option id=abc1 label="Value 1" value=1>Val 1</option>
+          <option id=abc2 label="Value 2" value=2>Val 2</option>
+          <option label="Value 3" value=3>Val 3</option>
+          <option label="Value 4" value=4>Val 4</option>
+        </select>
+      </p>
+      <p>
+        <label for=radioi1>
+          Radio
+        </label>
+        <span class=multiline-input>
+          <label for=radioi1>Radio Group
+            <input type=radio id=radioi1 name=r1>
+          </label>
+          <label for=radioi2>Radio Group
+            <input type=radio id=radioi2 name=r1>
+          </label>
+          <label for=radioi3>Radio Group
+            <input type=radio id=radioi3 name=r1>
+          </label>
+        </span>
+      </p>
+      <p>
+        <label for=ckboxi1>
+          Checkbox
+        </label>
+        <span class=multiline-input>
+          <label for=ckboxi1>Checkbox Group
+            <input type=checkbox id=ckboxi1 name=r1>
+          </label>
+          <label for=ckboxi2>Checkbox Group
+            <input type=checkbox id=ckboxi2 name=r1>
+          </label>
+          <label for=ckboxi3>Checkbox Group
+            <input type=checkbox id=ckboxi3 name=r1>
+          </label>
+        </span>
+      </p>
+      <p>
+        <label for=textai>Text Area</label>
+        <textarea id=textai></textarea>
+      </p>
+      <p>
+        <label></label>
+        <button id=submiti>Submit</button>
+        <button id=cleari>Clear</button>
+      </p>
+    </fieldset>
+  </form>
+  <br>
+  <br>
+  <section class=form>
+    <section class=fieldset>
+      <span class=legend>This Is My Editable Div</span>
+      <section class=p>
+        <span class=label>Editable Div</span>
+        <div class=textarea contenteditable>
+
+        </div>
+      </section>
+    </section>
+  </section>
+  <br>
+  <br>
+  <h1>Menus!</h1>
+  <h2>Vertical Panel / Drawer Menu</h2>
+  <nav>
+    <ul class="drawer vertical">
+      <li>
+        <input type=radio name=vpdmenu value=maboot_close id=maboot_close role=menuitemradio aria-haspopup=false>
+        <input checked type=radio name=vpdmenu value=maboot id=maboot role=menuitemradio aria-haspopup=true>
+        <label for=maboot_close>About</label>
+        <label for=maboot>About</label>
+        <ul class=panel role=menu aria-label="About">
+          <li><a role=menuitem target=contentWindow href=/welcome>Welcome!</a></li>
+          <li><a role=menuitem target=contentWindow href=/technology>The value of technology</a></li>
+          <li><a role=menuitem target=contentWindow href=/directors>Company leadership</a></li>
+          <li><a role=menuitem target=contentWindow href=/visionvaluesbehaviour>Our vision, values and behaviour</a></li>
+          <li><a role=menuitem target=contentWindow href=/history>History</a></li>
+          <li><a role=menuitem target=contentWindow href=/locations>Locations</a></li>
+          <li><a role=menuitem target=contentWindow href=/faq>FAQ</a></li>
+        </ul>
+      </li>
+      <li>
+        <input type=radio name=vpdmenu value=mpructs_close id=mpructs_close role=menuitemradio aria-haspopup=false>
+        <input type=radio name=vpdmenu value=mpructs id=mpructs role=menuitemradio aria-haspopup=true>
+        <label for=mpructs_close>Products</label>
+        <label for=mpructs>Products</label>
+        <ul class=panel role=menu aria-label=Products>
+          <li><a role=menuitem target=contentWindow href=/projectant>Project Ant</a></li>
+          <li><a role=menuitem target=contentWindow href=/projecttelefn>Project Telefn</a></li>
+          <li><a role=menuitem target=contentWindow href=/projectpostcode>Project PostCode</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <h2>Horizontal Drop down menu</h2>
+  <nav>
+    <ul class=horizontal>
+      <li>
+        <input type=radio name=menu value=about_close id=hd1about_close role=menuitemradio aria-haspopup=false>
+        <input type=radio name=menu value=about id=hd1about role=menuitemradio aria-haspopup=true checked>
+        <label for=hd1about_close>About</label>
+        <label for=hd1about>About</label>
+        <ul class=dropdown role=menu aria-label="About">
+          <li><a role=menuitem target=contentWindow href=/welcome>Welcome!</a></li>
+          <li><a role=menuitem target=contentWindow href=/technology>The value of technology</a></li>
+          <li><a role=menuitem target=contentWindow href=/directors>Company leadership</a></li>
+          <li><a role=menuitem target=contentWindow href=/visionvaluesbehaviour>Our vision, values and behaviour</a></li>
+          <li><a role=menuitem target=contentWindow href=/history>History</a></li>
+          <li><a role=menuitem target=contentWindow href=/locations>Locations</a></li>
+          <li><a role=menuitem target=contentWindow href=/faq>FAQ</a></li>
+        </ul>
+      </li>
+      <li>
+        <input type=radio name=menu value=products_close id=hd1products_close role=menuitemradio aria-haspopup=false>
+        <input type=radio name=menu value=products id=hd1products role=menuitemradio aria-haspopup=true>
+        <label for=hd1products_close>Products</label>
+        <label for=hd1products>Products</label>
+        <ul class=dropdown role=menu aria-label=Products>
+          <li><a role=menuitem target=contentWindow href=/projectant>Project Ant</a></li>
+          <li><a role=menuitem target=contentWindow href=/projecttelefn>Project Telefn</a></li>
+          <li><a role=menuitem target=contentWindow href=/projectpostcode>Project PostCode</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <br>
+  <br>
+  <h1>Lists!</h1>
+  <h2>Ordered</h2>
+  <ol>
+    <li>Article I</li>
+    <li>Sublist II
+      <ol>
+        <li>Section A</li>
+        <li>Sublist B
+          <ol>
+            <li>Sub-section 1</li>
+            <li>Sublist 2
+              <ol>
+                <li>Paragraph a</li>
+                <li>Sublist b
+                  <ol>
+                    <li>Clause i</li>
+                    <li>Clause ii</li>
+                  </ol>
+                </li>
+              </ol>
+            </li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+  <h2>Unordered</h2>
+  <ul>
+    <li>Article I</li>
+    <li>Sublist II
+      <ul>
+        <li>Section A</li>
+        <li>Sublist B
+          <ul>
+            <li>Sub-section 1</li>
+            <li>Sublist 2
+              <ul>
+                <li>Paragraph a</li>
+                <li>Sublist b
+                  <ul>
+                    <li>Clause i</li>
+                    <li>Clause ii</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
 <script src=test.js></script>
 <script>
   test.run();
