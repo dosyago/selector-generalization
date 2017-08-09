@@ -2,7 +2,7 @@
   "name": "selector-generalization",
   "version": "1.0.1",
   "description": "JavaScript utils to generalize a set of CSS selectors to a single selector that matches them all. Useful for mapping the structure of web apps.",
-  "main": "index.js",
+  "main": "lib.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

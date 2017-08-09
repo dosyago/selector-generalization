@@ -1,5 +1,6 @@
 "use strict";
 {
+  const path_lcs = require('./path_lcs.js');
   const sg = {
     generalize, 
     selector_for_all, 
@@ -13,6 +14,25 @@
   // Selector Generalization package entrypoint
 
   module.exports = sg;
+
+  // helpers ( interface to path_lcs )
+    
+    function run_mlcs( sels, options ) {
+      const els = sels.map( sel => document.querySelector(sel) );
+      const paths = els.map( el => path_lcs.get_canonical_path( el ) );
+      const basic = path_lcs.basic_multiple_lcs_from_canonical_path_list( paths );
+      const tournamnet = path_lcs.tournament_multiple_lcs_from_canonical_path_list( paths );
+      self.lastData = { basic, tournament };
+      console.log( lastData );
+      return lastData;
+    }
+
+  // simplification ( by heuristics )
+
+    function heuristically_simplify_sel( mlcs_sel ) {
+      // FIXME: implement
+      return mlcs_sel;
+    }
 
   function generalize( sels ) {
     // run mlcs on sels
