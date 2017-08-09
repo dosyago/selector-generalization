@@ -4,7 +4,7 @@ JavaScript utils to generalize a set of CSS selectors to a single selector that 
 
 ## running the test
 
-If you haven't install beefy and browserify
+If you haven't install beefy and browserify ( just for convenience, to serve the test page )
 
 `npm install -g browserify beefy`
 
