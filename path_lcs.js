@@ -1,5 +1,6 @@
 "use strict";
 {
+  const utils = require('./utils.js');
   const lcs_path = {
     get_canonical_path : function(elem) {
       var node = elem;
@@ -76,7 +77,7 @@
       for(i1 = 1; i1 < path1.length; i1 += 1 ) {
         for(i2 = 1; i2 < path2.length; i2 += 1 ) {
           address = path2.length*i1+i2;
-          quotient = order(intersection(path1[i1],path2[i2]))/order(union(path1[i1],path2[i2]));
+          quotient = utils.order(utils.intersection(path1[i1],path2[i2]))/utils.order(utils.union(path1[i1],path2[i2]));
           path1_path2_match_score = score_matrix[address-path2.length-1];
           path1_insert_score = score_matrix[address-1];
           path2_insert_score = score_matrix[address-path2.length];
@@ -107,7 +108,7 @@
           return [];
         }
         
-        var xy_intersection = intersection(x[i],y[j]);
+        var xy_intersection = utils.intersection(x[i],y[j]);
         if(!!xy_intersection) {
           if(last_match_i-i == 1 && last_match_j-j == 1) {
             last_match_i = i;
@@ -237,7 +238,7 @@
       return path2;  
     },
     tournament_multiple_lcs_from_canonical_path_list : function(list) {
-      const pairs = all_pairs(list);
+      const pairs = utils.all_pairs(list);
       const quadtuples = [];
       pairs.forEach( function(pair) {
           var pairlcs = lcs_path.lcs_from_canonical_path_pair(pair[0],pair[1]);

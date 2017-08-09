@@ -10,6 +10,7 @@
 
   function run() {
     console.log("Running tests...");
-    sg.generalize( ['div a.hat', 'div a.bat' ] );
+    const result = sg.generalize( ['div a.hat', 'div a.bat' ] );
+    console.log( result );
   }
 }
