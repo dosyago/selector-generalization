@@ -20,16 +20,28 @@
     return okay;
   }
 
+  // helpers
+
+    function inc( el ) {
+      const n = parseFloat( el.innerText );
+      el.innerText = n + 1;
+    }
+
+    function zero( el ) {
+      el.innerText = 0;
+    }
   // we could also make another test that tests if it 
   // somehow not too general 
   function run() {
     console.log("Running tests...");
     const set = new Set();
     let found = [];
-    document.addEventListener('mouseup', e => {
+    document.addEventListener('click', e => {
       if ( navigable.has( e.target.tagName ) ) {
         e.preventDefault();
       }
+    });
+    document.addEventListener('mouseup', e => {
       if( e.target.id == 'generalize' ) {
         const sel = sg.generalize( [...set] );
         found.forEach( el => {
@@ -37,6 +49,7 @@
           el.style.background = "none";
         });
         found = Array.from( document.querySelectorAll(sel) );
+        found_count.innerText = found.length;
         const result = validate( set, found );
         console.log(" Test result?", result );
         console.log( sel, set, found );
@@ -56,8 +69,19 @@
           el.style.background = "none";
         });
         set.clear();
+        found_count.innerText = 'n/a';
+        zero( positive_example_count );
+        zero( negative_example_count );
       } else {
+        if ( e.target.matches( 'article#testcontrols, article#testcontrols *' ) ) {
+          return;
+        }
         set.add( e.target );
+        if ( negate.checked ) {
+          inc( negative_example_count );
+        } else {
+          inc( positive_example_count );
+        }
         console.log(e.target.dataset.outline);
         e.target.style.outline = "2px solid lime";
       }
