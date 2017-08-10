@@ -167,6 +167,10 @@
         'BUTTON':true,'MAIN':true,'CONTENT':true,'ARTICLE':true,'HEADER':true,'FOOTER':true,
         'ASIDE':true,'NAV':true,'LABEL':true,
         'FORM':true,'FIELDSET':true,'LEGEND':true,
+        'THEAD':true,'TD':true,'TH':true,'TR':true,
+        'CAPTION':true,'COLGROUP':true,'COL':true,
+        'TFOOT':true,
+        'PICTURE':true,'FIGURE':true,
         'IMG':true,'IFRAME':true,'CANVAS':true,'INPUT':true,'PATH':true,'path':true,'EM':true,'CITE':true,'BLOCKQUOTE':true,'Q':true,'TABLE':true, 'TR':true,'TD':true,'TBODY':true,'BODY':true,'HEAD':true,'TITLE':true,'HTML':true,'OL':true,'UL':true,'ARTICLE':true,'SECTION':true,'CENTER':true,'A':true,'SPAN':true,'I':true,'B':true,'STRIKE':true,'P':true,'H1':true,'H2':true,'H3':true,'H4':true,'H5':true,'H6':true,'DL':true,'DT':true,'DD':true,'OL':true,'LI':true,'ADDRESS':true,'CENTER':true,'DEL':true,'DIV':true,'HR':true,'INS':true,'PRE':true};  
       var last_levelset = true;
       path.forEach( function (levelset) {
@@ -192,7 +196,7 @@
             } else if(level_sig.indexOf("TAG:") == 0) {
               // it's a tag name
               var tag_name = level_sig.split(/^TAG:/)[1];
-              if(!(tag_name in allowed_tags || (!!tag_name && tag_name.indexOf('::shadow') !== -1))) {
+              if(!tag_name) {
                 invalid_tag = true;
                 if(selector.length > 0) {
                   if(selector[selector.length-1] == '>') {
