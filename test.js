@@ -26,7 +26,7 @@
     console.log("Running tests...");
     const set = new Set();
     let found = [];
-    document.addEventListener('click', e => {
+    document.addEventListener('mouseup', e => {
       if ( navigable.has( e.target.tagName ) ) {
         e.preventDefault();
       }

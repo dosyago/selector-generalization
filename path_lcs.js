@@ -146,7 +146,7 @@
       const selector = [];
       const allowed_tags = {
         'BUTTON':true,'MAIN':true,'CONTENT':true,'ARTICLE':true,'HEADER':true,'FOOTER':true,
-        'ASIDE':true,'NAV':true,
+        'ASIDE':true,'NAV':true,'LABEL':true,
         'IMG':true,'IFRAME':true,'CANVAS':true,'INPUT':true,'PATH':true,'path':true,'EM':true,'CITE':true,'BLOCKQUOTE':true,'Q':true,'TABLE':true, 'TR':true,'TD':true,'TBODY':true,'BODY':true,'HEAD':true,'TITLE':true,'HTML':true,'OL':true,'UL':true,'ARTICLE':true,'SECTION':true,'CENTER':true,'A':true,'SPAN':true,'I':true,'B':true,'STRIKE':true,'P':true,'H1':true,'H2':true,'H3':true,'H4':true,'H5':true,'H6':true,'DL':true,'DT':true,'DD':true,'OL':true,'LI':true,'ADDRESS':true,'CENTER':true,'DEL':true,'DIV':true,'HR':true,'INS':true,'PRE':true};  
       var last_levelset = true;
       path.forEach( function (levelset) {
