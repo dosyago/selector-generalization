@@ -44,6 +44,7 @@
     document.addEventListener('mouseup', e => {
       if( e.target.id == 'generalize' ) {
         const sel = sg.generalize( [...set] );
+        generalized_selector.innerText = sel || 'n/a';
         found.forEach( el => {
           el.style.filter = "none";
           el.style.background = "none";
@@ -72,6 +73,7 @@
         found_count.innerText = 'n/a';
         zero( positive_example_count );
         zero( negative_example_count );
+        generalized_selector.innerText = 'n/a';
       } else {
         if ( e.target.matches( 'article#testcontrols, article#testcontrols *' ) ) {
           return;

@@ -1,5 +1,7 @@
   <article id=testcontrols
     style="
+      -webkit-user-select: none;
+      user-select: none;
       width:100%;
       position:fixed;
       z-index:3;
@@ -13,6 +15,18 @@
       <span style=color:orange;>found </span><span style="color:orange;" id=found_count>n/a</span>
       <label style="color:red;" for=negate>add -ve example?</label>
       <input type=checkbox name=negate value=negate id=negate>
+      <div id=generalized_selector
+        style="
+          overflow-x:auto;
+          border:2px solid silver;
+          padding:0.1rem;
+          background:#eee;
+          color:#555;
+          font-family: monospace;
+          max-width: 500px;
+          width: 500px;
+          white-space:nowrap;
+        ">n/a</div>
   </article>
   <h1>Selector Generalization  Tests</h1>
     <meta name=viewport content="width=device-width, initial-scale=1">
