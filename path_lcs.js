@@ -21,7 +21,7 @@
 {
   const utils = require('./utils.js');
   const lcs_path = {
-    get_canonical_path : function(elem) {
+    get_canonical_path(elem) {
       var node = elem;
       var index_name = '';
       var path = [];
@@ -102,7 +102,7 @@
       canonical_path.unshift({});
       return {canonical:canonical_path};
     },
-    lcs_from_canonical_path_pair : function(path1,path2) {
+    lcs_from_canonical_path_pair(path1,path2) {
       // implement
       const score_matrix = new Float32Array(new ArrayBuffer(4*path1.length*path2.length));
       var i1,i2,address, row_offset = path2.length,quotient, path1_path2_match_score,path1_insert_score,path2_insert_score;  
@@ -178,7 +178,7 @@
       }
       return {value:lcs_selector,score:max_value_index.value};  
     },
-    selector_from_canonical_path : function(path) {
+    selector_from_canonical_path(path) {
       const selector = [];
       const allowed_tags = {
         'BUTTON':true,'MAIN':true,'CONTENT':true,'ARTICLE':true,'HEADER':true,'FOOTER':true,
@@ -263,7 +263,7 @@
       const selector_str = selector.join(' ');
       return selector_str;
     },    
-    basic_multiple_lcs_from_canonical_path_list : function(list) {
+    basic_multiple_lcs_from_canonical_path_list(list) {
       if(list.length == 0) {
         return [];
       }
@@ -278,7 +278,7 @@
       }
       return path2;  
     },
-    tournament_multiple_lcs_from_canonical_path_list : function(list) {
+    tournament_multiple_lcs_from_canonical_path_list(list) {
       const pairs = utils.all_pairs(list);
       const quadtuples = [];
       pairs.forEach( function(pair) {
