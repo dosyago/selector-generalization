@@ -1,3 +1,5 @@
+// THese functions are basically extending querySelector
+// to allow custom selectors ( for attributes and parents )
 rn.selector = new (function selector() {
   /* functions */
     function attr(aselector) {
