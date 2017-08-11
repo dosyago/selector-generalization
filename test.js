@@ -34,6 +34,7 @@
   // somehow not too general 
   function run() {
     console.log("Running tests...");
+    const neg_set = new Set();
     const set = new Set();
     let found = [];
     document.addEventListener('click', e => {
@@ -43,9 +44,7 @@
     });
     document.addEventListener('mouseup', e => {
       if( e.target.id == 'generalize' ) {
-        const negation = negate.checked;
-        console.log('neg', negation);
-        const sel = sg.generalize( [...set], { negation } );
+        const sel = sg.generalize( [...set], [...neg_set] );
         generalized_selector.innerText = sel || 'n/a';
         found.forEach( el => {
           el.style.filter = "none";
@@ -71,6 +70,7 @@
           el.style.filter = "none";
           el.style.background = "none";
         });
+        neg_set.clear();
         set.clear();
         found_count.innerText = 'n/a';
         zero( positive_example_count );
@@ -80,10 +80,11 @@
         if ( !( e.target instanceof HTMLElement ) || e.target.matches( 'article#testcontrols, article#testcontrols *' ) ) {
           return;
         }
-        set.add( e.target );
         if ( negate.checked ) {
+          neg_set.add( e.target );
           inc( negative_example_count );
         } else {
+          set.add( e.target );
           inc( positive_example_count );
         }
         if ( e.target.style ) {

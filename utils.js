@@ -143,11 +143,38 @@
         return undefined;
       }
       var keys1 = Object.keys(dic1);
-      var i = {};
+      const i = {};
+      // handle negations in dic2 
+        Object.keys(dic2).forEach( k => {
+          if ( k.startsWith(':not(') ) {
+            const inner_key = k.slice(5,-1); 
+            if ( !(inner_key in dic1) ) {
+              i[k] = 1;
+            }
+          } else if ( k.startsWith('IDX::not(') ) {
+            const inner_key = k.slice(9,-1); 
+            if ( !(inner_key in dic1) ) {
+              i[k] = 1;
+            }
+          }
+        });
       var empty = true;
       for(var j = 0; j < keys1.length; j+=1 ) {
         var key = keys1[j];
-        if(key in dic2) {
+        //handle negations in dic1
+          let negation_ok = false;
+          if ( key.startsWith(':not(') ) {
+            const inner_key = key.slice(5,-1); 
+            if ( !(inner_key in dic2) ) {
+              negation_ok = true;
+            }
+          } else if ( key.startsWith('IDX::not(') ) {
+            const inner_key = key.slice(9,-1); 
+            if ( !(inner_key in dic2) ) {
+              negation_ok = true;
+            }
+          }
+        if(key in dic2 || negation_ok) {
           i[key] = 1;
           empty = false;
         }

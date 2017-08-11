@@ -55,7 +55,7 @@
                   count += 1;
                 }
                 if(sibling === node) {
-                  if ( negation ) {
+                  if ( negation && node.tagName !== 'BODY' ) {
                     index_name = `:not(:nth-of-type(${count}))`;
                   } else {
                     index_name = `:nth-of-type(${count})`;
