@@ -17,7 +17,7 @@
 
     function run_mlcs( sels, options ) {
       const els = sels.map( sel => isEl( sel ) ? sel : document.querySelector(sel) );
-      const paths = els.map( el => path_lcs.get_canonical_path( el ).canonical );
+      const paths = els.map( el => path_lcs.get_canonical_path( el, options.negation ).canonical );
       const basic = path_lcs.basic_multiple_lcs_from_canonical_path_list( paths );
       const tournament = path_lcs.tournament_multiple_lcs_from_canonical_path_list( paths );
       return { basic, tournament };
@@ -30,10 +30,10 @@
       return mlcs_sel;
     }
 
-  function generalize( sels ) {
+  function generalize( sels, {negation:negation = false} = {}) {
     // run mlcs on sels
     const options = { 
-
+      negation
     };
     const mlcs_path = run_mlcs( sels, options );
     const mlcs_sel = path_lcs.selector_from_canonical_path( mlcs_path.tournament );
@@ -50,5 +50,4 @@
     const simplified_sel = heuristically_simplify_sel( mlcs_sel );
     return simplified_sel;
   }
-
 }

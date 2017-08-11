@@ -43,7 +43,9 @@
     });
     document.addEventListener('mouseup', e => {
       if( e.target.id == 'generalize' ) {
-        const sel = sg.generalize( [...set] );
+        const negation = negate.checked;
+        console.log('neg', negation);
+        const sel = sg.generalize( [...set], { negation } );
         generalized_selector.innerText = sel || 'n/a';
         found.forEach( el => {
           el.style.filter = "none";

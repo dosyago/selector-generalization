@@ -21,7 +21,7 @@
 {
   const utils = require('./utils.js');
   const lcs_path = {
-    get_canonical_path : function(elem) {
+    get_canonical_path : function(elem, negation = false) {
       var node = elem;
       var index_name = '';
       var path = [];
@@ -30,60 +30,89 @@
       var canonical_level;
       while(!!node && node.tagName !== 'HTML') {
         if(!node.parentNode && !!node.host) {
+          // FIXME: possible issue from spec updates
+          // with the new changes in Shadow DOM v1
+          // these selectors may no longer work even in the dynamic profile
+          // so I may need to remove this code or find a workaround
           node = node.host;
           var shadow_level = {};
           shadow_level["TAG:"+node.tagName+"::shadow"] = 1;
           canonical_path.unshift(shadow_level);
         } else { 
+          // TODO:
+          // add some way to add more information
+          // such as other attributes, like src, href, type
+          // value, aria-role, itemprop, maybe data- and so on
+          // and some way to handle it in the algorithm
           canonical_level = {};
-          var node_index = undefined;
-          if(!!node.parentNode) {
-            var count = 0;
-            var siblings = node.parentNode.childNodes;
-            for(var i = 0; i < siblings.length; i += 1) {
-              if(siblings[i].tagName == node.tagName) {
-                count += 1;
-              }
-              if(siblings[i] === node) {
-                index_name = ":nth-of-type("+count+")";
-                break;
+
+          // get index_name ( like nth-of-type(n) )
+            if(!!node.parentNode) {
+              let count = 0;
+              const siblings = Array.from( node.parentNode.childNodes );
+              for( const sibling of siblings ) {
+                if(sibling.tagName == node.tagName) {
+                  count += 1;
+                }
+                if(sibling === node) {
+                  if ( negation ) {
+                    index_name = `:not(:nth-of-type(${count}))`;
+                  } else {
+                    index_name = `:nth-of-type(${count})`;
+                  }
+                  break;
+                }
               }
             }
-          }
-          if(!!node.id && node.id.length > 0) {
-            canonical_level['#'+node.id] = 1;
-          }
-          var level_name = node.tagName + index_name;  
-          var classes = node.className;
-          if(typeof classes !== 'string') {
-            // for SVG the className is an object. 
-            classes = [];
-          } else {
-            classes = classes.split(/\s+/);
-          }  
-          var new_classes = [];
-          classes.forEach(function(classword) {
-              if(classword.length > 0) {
-                canonical_level[classword] = 1;
-                new_classes.push(classword);
+
+          // add id ( if any ) to canonical level 
+            if(!!node.id && node.id.length > 0) {
+              if ( negation ) {
+                canonical_level[`:not(#${node.id})`] = 1;
+              } else {
+                canonical_level[`#${node.id}`] = 1;
               }
-            } );
-          if(new_classes.length > 0) {
-            var class_name = '.' + new_classes.join('.');
-            class_path.unshift(class_name);
-          } else {
-            class_path.unshift(level_name);  
-          }
-          path.unshift(level_name);
-          canonical_level["TAG:"+node.tagName] = 1;  
-          canonical_level["IDX:"+index_name] = 1;  
-          canonical_path.unshift(canonical_level);
-          /* try to work with shadow roots */
+            }
+
+          // get classes 
+            let classes;
+            try {
+              classes = node.getAttribute('class');
+            } catch(e) {
+              classes = node.className;
+            }
+            if(typeof classes !== 'string') {
+              // for SVG the className is an object. 
+              // add a fallback ( which ought to have been prevented by getAttribute above )
+              try {
+                classes = Array.from( node.classList );
+              } catch(e) {
+                classes = []
+              }
+            } else {
+              classes = classes.split(/\s+/);
+            }  
+
+          // add class words to canonical_level 
+            classes.forEach( classword => {
+              if(classword.length > 0) {
+                if ( negation ) {
+                  canonical_level[`:not(.${classword})`] = 1;
+                } else {
+                  canonical_level['.'+classword] = 1;
+                }
+              }
+            });
+
+          // add tag and index_name to canonical level 
+            canonical_level["TAG:"+node.tagName] = 1;  
+            canonical_level["IDX:"+index_name] = 1;  
+            canonical_path.unshift(canonical_level);
         }
         node = node.parentNode;
       }      
       canonical_path.unshift({});
-      return {path:path.join('>'),class_path:class_path.join('>'),canonical:canonical_path};
+      return {canonical:canonical_path};
     },
     lcs_from_canonical_path_pair : function(path1,path2) {
       // implement
@@ -223,7 +252,7 @@
           if(!tag_id) {
             tag_id = '';
           }
-          tag_id += '.' + classes.join('.');
+          tag_id += classes.join('');
         }
         if(!!tag_id) {
           selector.push(tag_id);
