@@ -20,10 +20,10 @@
       const n_els = n_sels.map( sel => isEl( sel ) ? sel : document.querySelector(sel) );
       const p_paths = p_els.map( el => path_lcs.get_canonical_path( el, false ).canonical );
       const n_paths = n_els.map( el => path_lcs.get_canonical_path( el, true ).canonical );
-      const paths = [...p_paths, ...n_paths];
-      const basic = path_lcs.basic_multiple_lcs_from_canonical_path_list( paths );
-      const tournament = path_lcs.tournament_multiple_lcs_from_canonical_path_list( paths );
-      return { basic, tournament };
+      //const basic = path_lcs.basic_multiple_lcs_from_canonical_path_list( paths );
+      const p_tournament = path_lcs.tournament_multiple_lcs_from_canonical_path_list( p_paths );
+      const n_tournament = path_lcs.tournament_multiple_lcs_from_canonical_path_list( n_paths );
+      return { p_tournament, n_tournament };
     }
 
   // simplification ( by heuristics )
@@ -33,12 +33,17 @@
       return mlcs_sel;
     }
 
+  // FIXME: implement issue #10 fully
+    // for now we just take 1 list of positive and 1 list of negative examples
+    // but the full specification calls for n lists of each
   function generalize( p_sels, n_sels ) {
     // run mlcs on sels
     const mlcs_path = run_mlcs( p_sels, n_sels );
-    const mlcs_sel = path_lcs.selector_from_canonical_path( mlcs_path.tournament );
-    const simplified_sel = heuristically_simplify_sel( mlcs_sel );
-    return simplified_sel;
+    const p_mlcs_sel = path_lcs.selector_from_canonical_path( mlcs_path.p_tournament || [] );
+    const n_mlcs_sel = path_lcs.selector_from_canonical_path( mlcs_path.n_tournament || [] );
+    const p_simplified_sel = heuristically_simplify_sel( p_mlcs_sel );
+    const n_simplified_sel = heuristically_simplify_sel( n_mlcs_sel );
+    return { positive: p_simplified_sel, negative: n_simplified_sel };
   }
 
   function get_parent( sels ) {

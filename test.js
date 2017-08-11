@@ -40,23 +40,34 @@
     const set = new Set();
     let found = [];
     document.addEventListener('click', e => {
-      if ( navigable.has( e.target.tagName ) ) {
-        e.preventDefault();
-      }
-    });
-    document.addEventListener('mouseup', e => {
-      if( e.target.id == 'generalize' ) {
-        const sel = sg.generalize( [...set], [...neg_set] );
-        generalized_selector.innerText = sel || 'n/a';
+      if ( e.target.id == 'negate' ) {
         found.forEach( el => {
           el.style.filter = "none";
           el.style.background = "none";
         });
-        found = Array.from( document.querySelectorAll(sel) );
+      } else {
+        if ( navigable.has( e.target.tagName ) ) {
+          e.preventDefault();
+        }
+      }
+    });
+    document.addEventListener('mouseup', e => {
+      if( e.target.id == 'generalize' ) {
+        const {positive,negative} = sg.generalize( [...set], [...neg_set] );
+        generalized_selector.innerText = `${positive} !(${negative})` || 'n/a';
+        found.forEach( el => {
+          el.style.filter = "none";
+          el.style.background = "none";
+        });
+        found = Array.from( document.querySelectorAll(positive) );
+        if ( !!negative ) {
+          const remove = new Set( Array.from( document.querySelectorAll(negative) ) );
+          found = found.filter( el => ! remove.has( el ) );
+        }
         found_count.innerText = found.length;
         const result = validate( set, found, neg_set );
         console.log(" Test result?", result );
-        console.log( sel, set, found );
+        console.log( "\npos", positive, "\nneg", negative, "\npset", set, "\nnset", neg_set, "\nfound", found );
         Array.from( set ).forEach( el => {
           el.style.outline = "3px dashed lime";
         });

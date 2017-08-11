@@ -1,6 +1,6 @@
 /**
 
- Copyright 2013-2017 Cris Stringfellow / DOSAYGO CREATIVE INTANGIBLE HOLDINGS (UK) LTD
+   Copyright 2013-2017 Cris Stringfellow / DOSAYGO CREATIVE INTANGIBLE HOLDINGS (UK) LTD
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 {
   const utils = require('./utils.js');
   const lcs_path = {
-    get_canonical_path : function(elem, negation = false) {
+    get_canonical_path : function(elem) {
       var node = elem;
       var index_name = '';
       var path = [];
@@ -39,11 +39,11 @@
           shadow_level["TAG:"+node.tagName+"::shadow"] = 1;
           canonical_path.unshift(shadow_level);
         } else { 
-          // TODO:
-          // add some way to add more information
-          // such as other attributes, like src, href, type
-          // value, aria-role, itemprop, maybe data- and so on
-          // and some way to handle it in the algorithm
+          // TODO: add more information issue #8
+            // add some way to add more information
+            // such as other attributes, like src, href, type
+            // value, aria-role, itemprop, maybe data- and so on
+            // and some way to handle it in the algorithm
           canonical_level = {};
 
           // get index_name ( like nth-of-type(n) )
@@ -55,11 +55,7 @@
                   count += 1;
                 }
                 if(sibling === node) {
-                  if ( negation && node.tagName !== 'BODY' ) {
-                    index_name = `:not(:nth-of-type(${count}))`;
-                  } else {
-                    index_name = `:nth-of-type(${count})`;
-                  }
+                  index_name = `:nth-of-type(${count})`;
                   break;
                 }
               }
@@ -67,11 +63,7 @@
 
           // add id ( if any ) to canonical level 
             if(!!node.id && node.id.length > 0) {
-              if ( negation ) {
-                canonical_level[`:not(#${node.id})`] = 1;
-              } else {
-                canonical_level[`#${node.id}`] = 1;
-              }
+              canonical_level[`#${node.id}`] = 1;
             }
 
           // get classes 
@@ -96,11 +88,7 @@
           // add class words to canonical_level 
             classes.forEach( classword => {
               if(classword.length > 0) {
-                if ( negation ) {
-                  canonical_level[`:not(.${classword})`] = 1;
-                } else {
-                  canonical_level['.'+classword] = 1;
-                }
+                canonical_level['.'+classword] = 1;
               }
             });
 
