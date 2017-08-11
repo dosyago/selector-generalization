@@ -152,7 +152,7 @@
               i[k] = 1;
             }
           } else if ( k.startsWith('IDX::not(') ) {
-            const inner_key = k.slice(9,-1); 
+            const inner_key = 'IDX:'+k.slice(9,-1); 
             if ( !(inner_key in dic1) ) {
               i[k] = 1;
             }
@@ -169,7 +169,7 @@
               negation_ok = true;
             }
           } else if ( key.startsWith('IDX::not(') ) {
-            const inner_key = key.slice(9,-1); 
+            const inner_key = 'IDX:'+key.slice(9,-1); 
             if ( !(inner_key in dic2) ) {
               negation_ok = true;
             }

@@ -14,9 +14,11 @@
   Object.assign( self, { test } );
 
   // one possible test
-  function validate( must_find, found ) {
+  function validate( must_find, found, must_not_find ) {
     found = new Set(found);
-    const okay = [...must_find].every( el => found.has( el ) );
+    const must_find_ok = [...must_find].every( el => found.has( el ) );
+    const must_not_find_ok = [...must_not_find].every( el => ! found.has(el) );
+    const okay = must_find_ok && must_not_find_ok;
     return okay;
   }
 
@@ -52,11 +54,14 @@
         });
         found = Array.from( document.querySelectorAll(sel) );
         found_count.innerText = found.length;
-        const result = validate( set, found );
+        const result = validate( set, found, neg_set );
         console.log(" Test result?", result );
         console.log( sel, set, found );
         Array.from( set ).forEach( el => {
           el.style.outline = "3px dashed lime";
+        });
+        Array.from( neg_set ).forEach( el => {
+          el.style.outline = "3px dashed red";
         });
         found.forEach( el => {
           el.style.filter = "sepia(1)";
@@ -66,12 +71,16 @@
         Array.from( set ).forEach( el => {
           el.style.outline = "none";
         });
+        Array.from( neg_set ).forEach( el => {
+          el.style.outline = "none";
+        });
         found.forEach( el => {
           el.style.filter = "none";
           el.style.background = "none";
         });
         neg_set.clear();
         set.clear();
+        negate.checked = false;
         found_count.innerText = 'n/a';
         zero( positive_example_count );
         zero( negative_example_count );
@@ -81,14 +90,24 @@
           return;
         }
         if ( negate.checked ) {
+          if ( set.has( e.target ) ) {
+            set.delete( e.target );
+          }
           neg_set.add( e.target );
           inc( negative_example_count );
         } else {
+          if ( neg_set.has( e.target ) ) {
+            neg_set.delete( e.target );
+          }
           set.add( e.target );
           inc( positive_example_count );
         }
         if ( e.target.style ) {
-          e.target.style.outline = "2px solid lime";
+          if ( negate.checked ) {
+              e.target.style.outline = "2px solid red";
+          } else {
+              e.target.style.outline = "2px solid lime";
+          }
         }
       }
     });
