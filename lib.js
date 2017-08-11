@@ -36,7 +36,7 @@
 
     };
     const mlcs_path = run_mlcs( sels, options );
-    const mlcs_sel = path_lcs.selector_from_canonical_path( mlcs_path.basic );
+    const mlcs_sel = path_lcs.selector_from_canonical_path( mlcs_path.tournament );
     const simplified_sel = heuristically_simplify_sel( mlcs_sel );
     return simplified_sel;
   }
