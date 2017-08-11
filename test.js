@@ -77,7 +77,7 @@
         zero( negative_example_count );
         generalized_selector.innerText = 'n/a';
       } else {
-        if ( e.target.matches( 'article#testcontrols, article#testcontrols *' ) ) {
+        if ( !( e.target instanceof HTMLElement ) || e.target.matches( 'article#testcontrols, article#testcontrols *' ) ) {
           return;
         }
         set.add( e.target );
@@ -86,8 +86,9 @@
         } else {
           inc( positive_example_count );
         }
-        console.log(e.target.dataset.outline);
-        e.target.style.outline = "2px solid lime";
+        if ( e.target.style ) {
+          e.target.style.outline = "2px solid lime";
+        }
       }
     });
   }
