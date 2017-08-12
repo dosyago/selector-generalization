@@ -14,16 +14,15 @@
   Object.assign( self, { test } );
 
   // one possible test
-  function validate( must_find, found, must_not_find ) {
-    found = new Set(found);
-    const must_find_ok = [...must_find].every( el => found.has( el ) );
-    const must_not_find_ok = [...must_not_find].every( el => ! found.has(el) );
-    const okay = must_find_ok && must_not_find_ok;
-    return okay;
-  }
+    function validate( must_find, found, must_not_find ) {
+      found = new Set(found);
+      const must_find_ok = [...must_find].every( el => found.has( el ) );
+      const must_not_find_ok = [...must_not_find].every( el => ! found.has(el) );
+      const okay = must_find_ok && must_not_find_ok;
+      return okay;
+    }
 
   // helpers
-
     function inc( el ) {
       const n = parseFloat( el.innerText );
       el.innerText = n + 1;
@@ -32,8 +31,7 @@
     function zero( el ) {
       el.innerText = 0;
     }
-  // we could also make another test that tests if it 
-  // somehow not too general 
+
   function run() {
     console.log("Running tests...");
     const neg_set = new Set();
