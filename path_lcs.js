@@ -22,12 +22,12 @@
   const utils = require('./utils.js');
   const lcs_path = {
     get_canonical_path(elem) {
-      var node = elem;
-      var index_name = '';
-      var path = [];
-      var class_path = [];
-      var canonical_path = [];
-      var canonical_level;
+      let node = elem;
+      let index_name = '';
+      let path = [];
+      let class_path = [];
+      let canonical_path = [];
+      let canonical_level;
       while(!!node && node.tagName !== 'HTML') {
         if(!node.parentNode && !!node.host) {
           // FIXME: possible issue from spec updates
@@ -35,7 +35,7 @@
           // these selectors may no longer work even in the dynamic profile
           // so I may need to remove this code or find a workaround
           node = node.host;
-          var shadow_level = {};
+          let shadow_level = {};
           shadow_level["TAG:"+node.tagName+"::shadow"] = 1;
           canonical_path.unshift(shadow_level);
         } else { 
@@ -105,9 +105,9 @@
     lcs_from_canonical_path_pair(path1,path2) {
       // implement
       const score_matrix = new Float32Array(new ArrayBuffer(4*path1.length*path2.length));
-      var i1,i2,address, row_offset = path2.length,quotient, path1_path2_match_score,path1_insert_score,path2_insert_score;  
-      var slice = [];
-      for(var si = 0;si <path2.length;si+=1) {
+      let i1,i2,address, row_offset = path2.length,quotient, path1_path2_match_score,path1_insert_score,path2_insert_score;  
+      let slice = [];
+      for(let si = 0;si <path2.length;si+=1) {
         slice.push(Number(score_matrix[si]).toFixed(2));
       }
       for(i1 = 1; i1 < path1.length; i1 += 1 ) {
@@ -120,14 +120,14 @@
           score_matrix[address] = Math.max(path1_insert_score,Math.max(path1_path2_match_score+quotient,path2_insert_score));
         }
         slice = [];
-        for(var si = i1*path2.length;si <= address;si+=1) {
+        for(let si = i1*path2.length;si <= address;si+=1) {
           slice.push(Number(score_matrix[si]).toFixed(2));
         }
       }  
       function find_max_value_index(s,x,y) {
         let max = 0;
         let max_index = s.length-1;
-        for(var i = 0; i < s.length; i += 1) {
+        for(let i = 0; i < s.length; i += 1) {
           if(s[i] >= max) {
             max = s[i];
             max_index = i;  
@@ -137,14 +137,14 @@
         const row_index = (max_index-column_index)/y.length;
         return {row:row_index,column:column_index,value:max};  
       }
-      var last_match_i = 0;
-      var last_match_j = 0;
+      let last_match_i = 0;
+      let last_match_j = 0;
       function lcs_read(s,x,y,i,j) {
         if(i == 0 || j == 0 ) {
           return [];
         }
         
-        var xy_intersection = utils.intersection(x[i],y[j]);
+        let xy_intersection = utils.intersection(x[i],y[j]);
         if(!!xy_intersection) {
           if(last_match_i-i == 1 && last_match_j-j == 1) {
             last_match_i = i;
@@ -154,8 +154,8 @@
             return lcs_read(s,x,y,i-1,j-1).concat([xy_intersection]);
           }
         } else {
-          var score_insert_y = s[i*y.length+j-1];
-          var score_insert_x = s[(i-1)*y.length+j];
+          let score_insert_y = s[i*y.length+j-1];
+          let score_insert_x = s[(i-1)*y.length+j];
           if(score_insert_y > score_insert_x) {
             return lcs_read(s,x,y,i,j-1);
           } else {
@@ -163,15 +163,15 @@
           }
         }
       }
-      var max_value_index = find_max_value_index(score_matrix,path1,path2);
-      var lcs_selector = lcs_read(score_matrix,path1,path2,max_value_index.row,max_value_index.column);
-      var last = lcs_selector[lcs_selector.length - 1];
+      let max_value_index = find_max_value_index(score_matrix,path1,path2);
+      let lcs_selector = lcs_read(score_matrix,path1,path2,max_value_index.row,max_value_index.column);
+      let last = lcs_selector[lcs_selector.length - 1];
       // remove trailing > or whitespace
       while(!!last && !!last['>']) {
         lcs_selector.pop();
         last = lcs_selector[lcs_selector.length - 1];
       }
-      var first = lcs_selector[0];
+      let first = lcs_selector[0];
       while(!!first && !!first['>']) {
         lcs_selector.shift();
         first = lcs_selector[0];
@@ -189,7 +189,7 @@
         'TFOOT':true,
         'PICTURE':true,'FIGURE':true,
         'IMG':true,'IFRAME':true,'CANVAS':true,'INPUT':true,'PATH':true,'path':true,'EM':true,'CITE':true,'BLOCKQUOTE':true,'Q':true,'TABLE':true, 'TR':true,'TD':true,'TBODY':true,'BODY':true,'HEAD':true,'TITLE':true,'HTML':true,'OL':true,'UL':true,'ARTICLE':true,'SECTION':true,'CENTER':true,'A':true,'SPAN':true,'I':true,'B':true,'STRIKE':true,'P':true,'H1':true,'H2':true,'H3':true,'H4':true,'H5':true,'H6':true,'DL':true,'DT':true,'DD':true,'OL':true,'LI':true,'ADDRESS':true,'CENTER':true,'DEL':true,'DIV':true,'HR':true,'INS':true,'PRE':true};  
-      var last_levelset = true;
+      let last_levelset = true;
       path.forEach( function (levelset) {
         if(!!levelset['>']) {
           if(last_levelset) {
@@ -198,11 +198,11 @@
           last_levelset = false;
           return;
         }
-        var level_sigs = Object.keys(levelset);
+        let level_sigs = Object.keys(levelset);
         level_sigs.sort().reverse();
-        var tag_id = undefined;
-        var invalid_tag = false;
-        var classes = [];
+        let tag_id = undefined;
+        let invalid_tag = false;
+        let classes = [];
         level_sigs.forEach( function ( level_sig ) {
             if(level_sig.indexOf("#") == 0) {
               //it's a tag id
@@ -212,7 +212,7 @@
               tag_id = tag_id + level_sig;
             } else if(level_sig.indexOf("TAG:") == 0) {
               // it's a tag name
-              var tag_name = level_sig.split(/^TAG:/)[1];
+              let tag_name = level_sig.split(/^TAG:/)[1];
               if(!tag_name) {
                 invalid_tag = true;
                 if(selector.length > 0) {
@@ -249,13 +249,13 @@
           last_levelset = false;
         }
       } );    
-      var last = selector[selector.length - 1];
+      let last = selector[selector.length - 1];
       // remove trailing > or whitespace
       while(!!last && last == '>') {
         selector.pop();
         last = selector[selector.length - 1];
       }
-      var first = selector[0];
+      let first = selector[0];
       while(!!first && !!first == '>') {
         selector.shift();
         first = selector[0];
@@ -267,11 +267,11 @@
       if(list.length == 0) {
         return [];
       }
-      var path2 = list[0];
-      var path1;
-      for(var i = 1; i < list.length; i+=1 ) {
+      let path2 = list[0];
+      let path1;
+      for(let i = 1; i < list.length; i+=1 ) {
         path1 = list[i];
-        var lcs = lcs_path.lcs_from_canonical_path_pair(path1,path2);
+        const lcs = lcs_path.lcs_from_canonical_path_pair(path1,path2);
         if(!!lcs) {
           path2 = lcs.value;
         }
@@ -282,8 +282,8 @@
       const pairs = utils.all_pairs(list);
       const quadtuples = [];
       pairs.forEach( function(pair) {
-          var pairlcs = lcs_path.lcs_from_canonical_path_pair(pair[0],pair[1]);
-          var quadtuple = {score:pairlcs.score,lcs:pairlcs.value,p1:pair[0],p2:pair[1]};
+          let pairlcs = lcs_path.lcs_from_canonical_path_pair(pair[0],pair[1]);
+          let quadtuple = {score:pairlcs.score,lcs:pairlcs.value,p1:pair[0],p2:pair[1]};
           quadtuples.push(quadtuple);
         });    
       quadtuples.sort(function (a,b) {
@@ -299,11 +299,11 @@
             return 0;
           } 
         });
-      var paired = {}, hash_value = 0;
-      var tournament_matches = [];
+      let paired = {}, hash_value = 0;
+      let tournament_matches = [];
       quadtuples.forEach(function(q4) {
-          var p1 = q4.p1;
-          var p2 = q4.p2;
+          let p1 = q4.p1;
+          let p2 = q4.p2;
           if(!!p1.hash_id || !!p2.hash_id) {
             return; // we have seen these
           } else {

@@ -20,7 +20,8 @@
       const n_els = n_sels.map( sel => isEl( sel ) ? sel : document.querySelector(sel) );
       const p_paths = p_els.map( el => path_lcs.get_canonical_path( el, false ).canonical );
       const n_paths = n_els.map( el => path_lcs.get_canonical_path( el, true ).canonical );
-      //const basic = path_lcs.basic_multiple_lcs_from_canonical_path_list( paths );
+      const basic = path_lcs.basic_multiple_lcs_from_canonical_path_list( p_paths );
+      console.log( basic );
       const p_tournament = path_lcs.tournament_multiple_lcs_from_canonical_path_list( p_paths );
       const n_tournament = path_lcs.tournament_multiple_lcs_from_canonical_path_list( n_paths );
       return { p_tournament, n_tournament };
