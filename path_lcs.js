@@ -21,13 +21,10 @@
 {
   const utils = require('./utils.js');
   const lcs_path = {
-    get_canonical_path(elem) {
-      let node = elem;
-      let index_name = '';
-      let path = [];
-      let class_path = [];
-      let canonical_path = [];
-      let canonical_level;
+    get_canonical_path(node) {
+      const path = [];
+      const class_path = [];
+      const canonical_path = [];
       while(!!node && node.tagName !== 'HTML') {
         if(!node.parentNode && !!node.host) {
           // FIXME: possible issue from spec updates
@@ -35,7 +32,7 @@
           // these selectors may no longer work even in the dynamic profile
           // so I may need to remove this code or find a workaround
           node = node.host;
-          let shadow_level = {};
+          const shadow_level = {};
           shadow_level["TAG:"+node.tagName+"::shadow"] = 1;
           canonical_path.unshift(shadow_level);
         } else { 
@@ -44,9 +41,10 @@
             // such as other attributes, like src, href, type
             // value, aria-role, itemprop, maybe data- and so on
             // and some way to handle it in the algorithm
-          canonical_level = {};
+          const canonical_level = {};
 
           // get index_name ( like nth-of-type(n) )
+            let index_name = '';
             if(!!node.parentNode) {
               let count = 0;
               const siblings = Array.from( node.parentNode.childNodes );
@@ -103,17 +101,21 @@
       return {canonical:canonical_path};
     },
     lcs_from_canonical_path_pair(path1,path2) {
-      // implement
       const score_matrix = new Float32Array(new ArrayBuffer(4*path1.length*path2.length));
-      let i1,i2,address, row_offset = path2.length,quotient, path1_path2_match_score,path1_insert_score,path2_insert_score;  
+      const row_offset = path2.length;
       let slice = [];
+      let i1,i2;
+      let address;
+      let path1_path2_match_score, path1_insert_score, path2_insert_score;
+      
       for(let si = 0;si <path2.length;si+=1) {
         slice.push(Number(score_matrix[si]).toFixed(2));
       }
+
       for(i1 = 1; i1 < path1.length; i1 += 1 ) {
         for(i2 = 1; i2 < path2.length; i2 += 1 ) {
+          const quotient = utils.order(utils.intersection(path1[i1],path2[i2]))/utils.order(utils.union(path1[i1],path2[i2]));
           address = path2.length*i1+i2;
-          quotient = utils.order(utils.intersection(path1[i1],path2[i2]))/utils.order(utils.union(path1[i1],path2[i2]));
           path1_path2_match_score = score_matrix[address-path2.length-1];
           path1_insert_score = score_matrix[address-1];
           path2_insert_score = score_matrix[address-path2.length];
@@ -124,6 +126,27 @@
           slice.push(Number(score_matrix[si]).toFixed(2));
         }
       }  
+
+      let last_match_i = 0;
+      let last_match_j = 0;
+
+      const max_value_index = find_max_value_index(score_matrix,path1,path2);
+      const lcs_selector = lcs_read(score_matrix,path1,path2,max_value_index.row,max_value_index.column);
+
+      let last = lcs_selector[lcs_selector.length - 1];
+      while(!!last && !!last['>']) {
+        lcs_selector.pop();
+        last = lcs_selector[lcs_selector.length - 1];
+      }
+
+      let first = lcs_selector[0];
+      while(!!first && !!first['>']) {
+        lcs_selector.shift();
+        first = lcs_selector[0];
+      }
+
+      return {value:lcs_selector,score:max_value_index.value};  
+
       function find_max_value_index(s,x,y) {
         let max = 0;
         let max_index = s.length-1;
@@ -137,8 +160,6 @@
         const row_index = (max_index-column_index)/y.length;
         return {row:row_index,column:column_index,value:max};  
       }
-      let last_match_i = 0;
-      let last_match_j = 0;
       function lcs_read(s,x,y,i,j) {
         if(i == 0 || j == 0 ) {
           return [];
@@ -163,33 +184,11 @@
           }
         }
       }
-      let max_value_index = find_max_value_index(score_matrix,path1,path2);
-      let lcs_selector = lcs_read(score_matrix,path1,path2,max_value_index.row,max_value_index.column);
-      let last = lcs_selector[lcs_selector.length - 1];
-      // remove trailing > or whitespace
-      while(!!last && !!last['>']) {
-        lcs_selector.pop();
-        last = lcs_selector[lcs_selector.length - 1];
-      }
-      let first = lcs_selector[0];
-      while(!!first && !!first['>']) {
-        lcs_selector.shift();
-        first = lcs_selector[0];
-      }
-      return {value:lcs_selector,score:max_value_index.value};  
     },
     selector_from_canonical_path(path) {
       const selector = [];
-      const allowed_tags = {
-        'BUTTON':true,'MAIN':true,'CONTENT':true,'ARTICLE':true,'HEADER':true,'FOOTER':true,
-        'ASIDE':true,'NAV':true,'LABEL':true,
-        'FORM':true,'FIELDSET':true,'LEGEND':true,
-        'THEAD':true,'TD':true,'TH':true,'TR':true,
-        'CAPTION':true,'COLGROUP':true,'COL':true,
-        'TFOOT':true,
-        'PICTURE':true,'FIGURE':true,
-        'IMG':true,'IFRAME':true,'CANVAS':true,'INPUT':true,'PATH':true,'path':true,'EM':true,'CITE':true,'BLOCKQUOTE':true,'Q':true,'TABLE':true, 'TR':true,'TD':true,'TBODY':true,'BODY':true,'HEAD':true,'TITLE':true,'HTML':true,'OL':true,'UL':true,'ARTICLE':true,'SECTION':true,'CENTER':true,'A':true,'SPAN':true,'I':true,'B':true,'STRIKE':true,'P':true,'H1':true,'H2':true,'H3':true,'H4':true,'H5':true,'H6':true,'DL':true,'DT':true,'DD':true,'OL':true,'LI':true,'ADDRESS':true,'CENTER':true,'DEL':true,'DIV':true,'HR':true,'INS':true,'PRE':true};  
       let last_levelset = true;
+
       path.forEach( function (levelset) {
         if(!!levelset['>']) {
           if(last_levelset) {
@@ -198,68 +197,74 @@
           last_levelset = false;
           return;
         }
-        let level_sigs = Object.keys(levelset);
+        const classes = [];
+        const level_sigs = Object.keys(levelset);
         level_sigs.sort().reverse();
         let tag_id = undefined;
         let invalid_tag = false;
-        let classes = [];
+
         level_sigs.forEach( function ( level_sig ) {
-            if(level_sig.indexOf("#") == 0) {
-              //it's a tag id
+          if(level_sig.indexOf("#") == 0) {
+            //it's a tag id
+            if(!tag_id) {
+              tag_id = '';
+            }
+            tag_id = tag_id + level_sig;
+          } else if(level_sig.indexOf("TAG:") == 0) {
+            // it's a tag name
+            let tag_name = level_sig.split(/^TAG:/)[1];
+            if(!tag_name) {
+              invalid_tag = true;
+              if(selector.length > 0) {
+                if(selector[selector.length-1] == '>') {
+                  selector.pop();
+                }
+              }
+            } else {
               if(!tag_id) {
                 tag_id = '';
               }
-              tag_id = tag_id + level_sig;
-            } else if(level_sig.indexOf("TAG:") == 0) {
-              // it's a tag name
-              let tag_name = level_sig.split(/^TAG:/)[1];
-              if(!tag_name) {
-                invalid_tag = true;
-                if(selector.length > 0) {
-                  if(selector[selector.length-1] == '>') {
-                    selector.pop();
-                  }
-                }
-              } else {
-                if(!tag_id) {
-                  tag_id = '';
-                }
-                tag_id = tag_name+tag_id;
-              }
-            } else if(level_sig.indexOf("IDX:") == 0) {
-              // it's an tag nth of type index. Use it if we have a tagname
-              if(!!tag_id) {
-                tag_id = tag_id + level_sig.split("IDX:")[1];
-              }
-            } else {
-              // it's a class name
-              classes.push(level_sig);
+              tag_id = tag_name+tag_id;
             }
-          } );
+          } else if(level_sig.indexOf("IDX:") == 0) {
+            // it's an tag nth of type index. Use it if we have a tagname
+            if(!!tag_id) {
+              tag_id = tag_id + level_sig.split("IDX:")[1];
+            }
+          } else {
+            // it's a class name
+            classes.push(level_sig);
+          }
+        });
+
         if(classes.length > 0) {
           if(!tag_id) {
             tag_id = '';
           }
           tag_id += classes.join('');
         }
+
         if(!!tag_id) {
           selector.push(tag_id);
           last_levelset = true && !invalid_tag;
         } else {
           last_levelset = false;
         }
-      } );    
+      });    
+
       let last = selector[selector.length - 1];
       // remove trailing > or whitespace
       while(!!last && last == '>') {
         selector.pop();
         last = selector[selector.length - 1];
       }
+
       let first = selector[0];
       while(!!first && !!first == '>') {
         selector.shift();
         first = selector[0];
       }
+
       const selector_str = selector.join(' ');
       return selector_str;
     },    
@@ -281,41 +286,47 @@
     tournament_multiple_lcs_from_canonical_path_list(list) {
       const pairs = utils.all_pairs(list);
       const quadtuples = [];
+
       pairs.forEach( function(pair) {
-          let pairlcs = lcs_path.lcs_from_canonical_path_pair(pair[0],pair[1]);
-          let quadtuple = {score:pairlcs.score,lcs:pairlcs.value,p1:pair[0],p2:pair[1]};
-          quadtuples.push(quadtuple);
-        });    
+        const pairlcs = lcs_path.lcs_from_canonical_path_pair(pair[0],pair[1]);
+        const quadtuple = {score:pairlcs.score,lcs:pairlcs.value,p1:pair[0],p2:pair[1]};
+        quadtuples.push(quadtuple);
+      });    
+
       quadtuples.sort(function (a,b) {
-          if(a.score < b.score) {
-            return -1;
-          } else if(a.score > b.score) {
-            return 1;
-          } else if(a.lcs.length < b.lcs.length) {
-            return -1;
-          } else if(a.lcs.length > b.lcs.length) {
-            return 1;
-          } else {
-            return 0;
-          } 
-        });
-      let paired = {}, hash_value = 0;
-      let tournament_matches = [];
+        if(a.score < b.score) {
+          return -1;
+        } else if(a.score > b.score) {
+          return 1;
+        } else if(a.lcs.length < b.lcs.length) {
+          return -1;
+        } else if(a.lcs.length > b.lcs.length) {
+          return 1;
+        } else {
+          return 0;
+        } 
+      });
+
+      const tournament_matches = [];
+      const paired = {};
+      let hash_value = 0;
+
       quadtuples.forEach(function(q4) {
-          let p1 = q4.p1;
-          let p2 = q4.p2;
-          if(!!p1.hash_id || !!p2.hash_id) {
-            return; // we have seen these
-          } else {
-            p1.hash_id = hash_value;
-            paired[hash_value] = p1;
-            hash_value += 1;
-            p2.hash_id = hash_value;
-            paired[hash_value] = p2;
-            hash_value += 1;
-            tournament_matches.push(q4.lcs);  
-          }  
-        });
+        const p1 = q4.p1;
+        const p2 = q4.p2;
+        if(!!p1.hash_id || !!p2.hash_id) {
+          return; // we have seen these
+        } else {
+          p1.hash_id = hash_value;
+          paired[hash_value] = p1;
+          hash_value += 1;
+          p2.hash_id = hash_value;
+          paired[hash_value] = p2;
+          hash_value += 1;
+          tournament_matches.push(q4.lcs);  
+        }  
+      });
+
       if(tournament_matches.length > 1) {
         return lcs_path.tournament_multiple_lcs_from_canonical_path_list(tournament_matches); 
       } else {
