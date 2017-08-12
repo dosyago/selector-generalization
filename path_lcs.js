@@ -161,7 +161,7 @@
         return {row:row_index,column:column_index,value:max};  
       }
       function lcs_read(s,x,y,i,j) {
-        if(i == 0 || j == 0 ) {
+        if(i <= 0 || j <= 0 ) {
           return [];
         }
         
@@ -189,7 +189,7 @@
       const selector = [];
       let last_levelset = true;
 
-      path.forEach( function (levelset) {
+      path.forEach( levelset => {
         if(!!levelset['>']) {
           if(last_levelset) {
             selector.push('>');
@@ -203,7 +203,7 @@
         let tag_id = undefined;
         let invalid_tag = false;
 
-        level_sigs.forEach( function ( level_sig ) {
+        level_sigs.forEach( level_sig => {
           if(level_sig.indexOf("#") == 0) {
             //it's a tag id
             if(!tag_id) {
@@ -287,13 +287,13 @@
       const pairs = utils.all_pairs(list);
       const quadtuples = [];
 
-      pairs.forEach( function(pair) {
+      pairs.forEach( pair => {
         const pairlcs = lcs_path.lcs_from_canonical_path_pair(pair[0],pair[1]);
         const quadtuple = {score:pairlcs.score,lcs:pairlcs.value,p1:pair[0],p2:pair[1]};
         quadtuples.push(quadtuple);
       });    
 
-      quadtuples.sort(function (a,b) {
+      quadtuples.sort( (a,b) => {
         if(a.score < b.score) {
           return -1;
         } else if(a.score > b.score) {
@@ -311,7 +311,7 @@
       const paired = {};
       let hash_value = 0;
 
-      quadtuples.forEach(function(q4) {
+      quadtuples.forEach( q4 => {
         const p1 = q4.p1;
         const p2 = q4.p2;
         if(!!p1.hash_id || !!p2.hash_id) {
