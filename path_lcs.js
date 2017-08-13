@@ -20,6 +20,7 @@
 "use strict";
 {
   const utils = require('./utils.js');
+  
   const lcs_path = {
     get_canonical_path(node) {
       const path = [];
@@ -115,11 +116,17 @@
       for(i1 = 1; i1 < path1.length; i1 += 1 ) {
         for(i2 = 1; i2 < path2.length; i2 += 1 ) {
           const quotient = utils.order(utils.intersection(path1[i1],path2[i2]))/utils.order(utils.union(path1[i1],path2[i2]));
+          const tag1 = get_tag(path1[i1]);
+          const tag2 = get_tag(path2[i2]);
+          let tag_mismatch_penalty = 0;
+          if ( tag1 != tag2 ) {
+            tag_mismatch_penalty = 0.5;
+          }
           address = path2.length*i1+i2;
-          path1_path2_match_score = score_matrix[address-path2.length-1];
+          path1_path2_match_score = score_matrix[address-path2.length-1]+quotient-tag_mismatch_penalty;
           path1_insert_score = score_matrix[address-1];
           path2_insert_score = score_matrix[address-path2.length];
-          score_matrix[address] = Math.max(path1_insert_score,Math.max(path1_path2_match_score+quotient,path2_insert_score));
+          score_matrix[address] = Math.max(path1_insert_score,path1_path2_match_score,path2_insert_score);
         }
         slice = [];
         for(let si = i1*path2.length;si <= address;si+=1) {
@@ -334,6 +341,10 @@
       }    
     }
   };
+
+  function get_tag(o) {
+    return Object.keys( o ).find( k => k.startsWith('TAG:' ) );
+  }
 
   module.exports = lcs_path;
 }
