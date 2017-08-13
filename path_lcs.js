@@ -116,12 +116,16 @@
       for(i1 = 1; i1 < path1.length; i1 += 1 ) {
         for(i2 = 1; i2 < path2.length; i2 += 1 ) {
           const quotient = utils.order(utils.intersection(path1[i1],path2[i2]))/utils.order(utils.union(path1[i1],path2[i2]));
-          const tag1 = utils.get_tag(path1[i1]);
-          const tag2 = utils.get_tag(path2[i2]);
-          let tag_mismatch_penalty = 0;
-          if ( tag1 != tag2 ) {
-            tag_mismatch_penalty = 0.5;
-          }
+          let tag_mismatch_penalty=0;
+          /**
+            const tag1 = utils.get_tag_or_any(path1[i1]);
+            const tag2 = utils.get_tag_or_any(path2[i2]);
+            console.log(tag1,tag2);
+            let tag_mismatch_penalty = 0;
+            if ( tag1 != tag2 && false ) {
+              tag_mismatch_penalty = 0.5;
+            }
+          **/
           address = path2.length*i1+i2;
           path1_path2_match_score = score_matrix[address-path2.length-1]+quotient-tag_mismatch_penalty;
           path1_insert_score = score_matrix[address-1];
@@ -173,7 +177,9 @@
         }
         
         let xy_intersection = utils.any_intersection(x[i],y[j]);
+        console.log(xy_intersection);
         if(!!xy_intersection) {
+          console.log(xy_intersection);
           if(last_match_i-i == 1 && last_match_j-j == 1) {
             last_match_i = i;
             last_match_j = j;

@@ -24,6 +24,7 @@
       }
     }
     ,any_intersection(dic1,dic2) {
+      console.log(dic1,dic2);
       if(!dic1 || !dic2) {
         return undefined;
       }
@@ -37,11 +38,15 @@
           i[key] = 1;
           empty = false;
         } else if ( key.startsWith('TAG:') ) {
+          console.log("TAG", key);
           tag = `:-webkit-any( ${key.slice(4)}, ${utils.get_tag_or_any(dic2)})`;
+          console.log(tag);
           i[tag] = 1; 
+          empty = false;
         } else if ( key.startsWith(":-webkit-any" ) ) {
           tag = `:-webkit-any( ${key.slice(13,-1)}, ${utils.get_tag_or_any(dic2)})`;
           i[tag] = 1; 
+          empty = false;
         }
       }
       if(empty) {
