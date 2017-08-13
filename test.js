@@ -102,14 +102,18 @@
           if ( set.has( e.target ) ) {
             set.delete( e.target );
           }
-          neg_set.add( e.target );
-          inc( negative_example_count );
+          if ( ! neg_set.has( e.target ) ) {
+            neg_set.add( e.target );
+            inc( negative_example_count );
+          }
         } else {
           if ( neg_set.has( e.target ) ) {
             neg_set.delete( e.target );
           }
-          set.add( e.target );
-          inc( positive_example_count );
+          if ( ! set.has( e.target ) ) {
+            set.add( e.target );
+            inc( positive_example_count );
+          }
         }
         if ( e.target.style ) {
           if ( negate.checked ) {
