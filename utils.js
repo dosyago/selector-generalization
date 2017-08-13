@@ -24,7 +24,6 @@
       }
     }
     ,any_intersection(dic1,dic2) {
-      console.log(dic1,dic2);
       if(!dic1 || !dic2) {
         return undefined;
       }
