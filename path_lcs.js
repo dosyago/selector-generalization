@@ -181,21 +181,31 @@
         } else {
           xy_intersection = utils.intersection(x[i],y[j]);
         }
-        if(!!xy_intersection) {
-          if(last_match_i-i == 1 && last_match_j-j == 1) {
-            last_match_i = i;
-            last_match_j = j;
-            return lcs_read(s,x,y,i-1,j-1).concat([xy_intersection,{'>':1}]);
-          } else {
-            return lcs_read(s,x,y,i-1,j-1).concat([xy_intersection]);
-          }
+        if(false && !!xy_intersection) {
+          console.log( i, j, x[i], y[j] );
         } else {
-          let score_insert_y = s[i*y.length+j-1];
-          let score_insert_x = s[(i-1)*y.length+j];
-          if(score_insert_y > score_insert_x) {
-            return lcs_read(s,x,y,i,j-1);
-          } else {
-            return lcs_read(s,x,y,i-1,j);
+          let quotient = 0;
+          if ( !!xy_intersection ) {
+            quotient = utils.order(xy_intersection)/utils.order(utils.union(x[i],y[j]));
+          }
+          const score_match_x_y = s[(i-1)*y.length+j-1];
+          const score_insert_y = s[i*y.length+j-1];
+          const score_insert_x = s[(i-1)*y.length+j];
+          const max = Math.max( score_match_x_y,score_insert_y,score_insert_x );
+          console.log( max, score_match_x_y,score_insert_y,score_insert_x );
+          switch( max ) {
+            case score_match_x_y:
+              if(quotient == 1 && last_match_i-i == 1 && last_match_j-j == 1) {
+                last_match_i = i;
+                last_match_j = j;
+                return lcs_read(s,x,y,i-1,j-1).concat([xy_intersection,{'>':1}]);
+              } else {
+                return lcs_read(s,x,y,i-1,j-1).concat([xy_intersection]);
+              }
+            case score_insert_y:
+              return lcs_read(s,x,y,i,j-1);
+            case score_insert_x:
+              return lcs_read(s,x,y,i-1,j);
           }
         }
       }
