@@ -116,8 +116,8 @@
       for(i1 = 1; i1 < path1.length; i1 += 1 ) {
         for(i2 = 1; i2 < path2.length; i2 += 1 ) {
           const quotient = utils.order(utils.intersection(path1[i1],path2[i2]))/utils.order(utils.union(path1[i1],path2[i2]));
-          const tag1 = get_tag(path1[i1]);
-          const tag2 = get_tag(path2[i2]);
+          const tag1 = utils.get_tag(path1[i1]);
+          const tag2 = utils.get_tag(path2[i2]);
           let tag_mismatch_penalty = 0;
           if ( tag1 != tag2 ) {
             tag_mismatch_penalty = 0.5;
@@ -172,7 +172,7 @@
           return [];
         }
         
-        let xy_intersection = utils.intersection(x[i],y[j]);
+        let xy_intersection = utils.any_intersection(x[i],y[j]);
         if(!!xy_intersection) {
           if(last_match_i-i == 1 && last_match_j-j == 1) {
             last_match_i = i;
@@ -341,10 +341,6 @@
       }    
     }
   };
-
-  function get_tag(o) {
-    return Object.keys( o ).find( k => k.startsWith('TAG:' ) );
-  }
 
   module.exports = lcs_path;
 }

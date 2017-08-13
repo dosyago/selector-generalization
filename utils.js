@@ -11,6 +11,45 @@
       }
       return pairs;
     }
+    ,get_tag(o) {
+      return Object.keys(o).find( k => k.startsWith('TAG:') );
+    }
+    ,get_tag_or_any(o) {
+      const tag = Object.keys(o).find( k => k.startsWith('TAG:') );
+      const any = Object.keys(o).find( k => k.startsWith(':-webkit-any') );
+      if ( !! tag ) {
+        return tag.slice(4);
+      } else if ( !! any ) {
+        return any.slice(13,-1);
+      }
+    }
+    ,any_intersection(dic1,dic2) {
+      console.log(dic1,dic2);
+      if(!dic1 || !dic2) {
+        return undefined;
+      }
+      const keys1 = Object.keys(dic1);
+      const i = {};
+      let empty = true;
+      let tag;
+      for(let j = 0; j < keys1.length; j+=1 ) {
+        const key = keys1[j];
+        if(key in dic2) {
+          i[key] = 1;
+          empty = false;
+        } else if ( key.startsWith('TAG:') ) {
+          tag = `:-webkit-any( ${key.slice(4)}, ${utils.get_tag_or_any(dic2)})`;
+          i[tag] = 1; 
+        } else if ( key.startsWith(":-webkit-any" ) ) {
+          tag = `:-webkit-any( ${key.slice(13,-1)}, ${utils.get_tag_or_any(dic2)})`;
+          i[tag] = 1; 
+        }
+      }
+      if(empty) {
+        return undefined;
+      }
+      return i;
+    }
     ,intersection(dic1,dic2) {
       if(!dic1 || !dic2) {
         return undefined;
