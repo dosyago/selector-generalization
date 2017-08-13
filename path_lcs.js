@@ -134,10 +134,9 @@
         }
       }  
 
-      let last_match_i = 0;
-      let last_match_j = 0;
-
       const max_value_index = find_max_value_index(score_matrix,path1,path2);
+      let last_match_i = max_value_index.row;
+      let last_match_j = max_value_index.column;
       const lcs_selector = lcs_read(score_matrix,path1,path2,max_value_index.row,max_value_index.column);
 
       let last = lcs_selector[lcs_selector.length - 1];
@@ -168,6 +167,7 @@
         return {row:row_index,column:column_index,value:max};  
       }
       function lcs_read(s,x,y,i,j) {
+        console.log( last_match_i, i, x[i], "\n", last_match_j, j, y[j] );
         if(i <= 0 || j <= 0 ) {
           return [];
         }
@@ -177,7 +177,7 @@
           if(last_match_i-i == 1 && last_match_j-j == 1) {
             last_match_i = i;
             last_match_j = j;
-            return lcs_read(s,x,y,i-1,j-1).concat([{'>':1},xy_intersection]);
+            return lcs_read(s,x,y,i-1,j-1).concat([xy_intersection,{'>':1}]);
           } else {
             return lcs_read(s,x,y,i-1,j-1).concat([xy_intersection]);
           }
@@ -194,14 +194,13 @@
     },
     selector_from_canonical_path(path) {
       const selector = [];
-      let last_levelset = true;
 
       path.forEach( levelset => {
         if(!!levelset['>']) {
-          if(last_levelset) {
+          const last = selector[selector.length-1];
+          if(last !== '>') {
             selector.push('>');
           }
-          last_levelset = false;
           return;
         }
         const classes = [];
@@ -219,8 +218,9 @@
             tag_id = tag_id + level_sig;
           } else if(level_sig.indexOf("TAG:") == 0) {
             // it's a tag name
-            let tag_name = level_sig.split(/^TAG:/)[1];
+            let tag_name = level_sig.slice(4);
             if(!tag_name) {
+              console.warn("Really this happens?", level_sig );
               invalid_tag = true;
               if(selector.length > 0) {
                 if(selector[selector.length-1] == '>') {
@@ -253,9 +253,6 @@
 
         if(!!tag_id) {
           selector.push(tag_id);
-          last_levelset = true && !invalid_tag;
-        } else {
-          last_levelset = false;
         }
       });    
 
