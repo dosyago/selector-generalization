@@ -4,6 +4,9 @@
   const sg = {
     generalize, 
     get_parent,
+    set any_mode( mode ) {
+      path_lcs.any_mode = mode;
+    }
   };
   // Selector Generalization package entrypoint
 

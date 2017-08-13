@@ -15,6 +15,8 @@
       <span style=color:orange;>found </span><span style="color:orange;" id=found_count>n/a</span>
       <label style="color:red;" for=negate>add -ve example?</label>
       <input type=checkbox name=negate value=negate id=negate>
+      <label style="color:red;" for=any_mode>:any&nbsp;mode?</label>
+      <input type=checkbox name=any_mode value=any_mode id=any_mode checked>
       <div id=generalized_selector
         style="
           overflow-x:auto;
@@ -32,6 +34,7 @@
   <main>
     <h1>-webkit-any() tests</h1>
     <div>
+      <h1>Non leaf any</h1>
       <span>
         <a href=#>Ok div span 1</a>
         <a href=#>Ok div span 2</a>
@@ -40,6 +43,24 @@
         <a href=#>Ok div div 1</a>
         <a href=#>Ok div div 2</a>
       </div>
+    </div>
+    <div id=tree>
+      <h1>Non direct descendent (different path length) any</h1>
+      <ul class=mega>
+        <li>
+          <ul>
+            <li>
+              <span class=apple>Deep Apple</span>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul class=mega>
+        <li>
+          <span class=apple>Shallow Apple</span>
+        </li>
+      </ul>
+      <span class=apple>Top Apple</span>
     </div>
     <meta name=viewport content="width=device-width, initial-scale=1">
     <h1>Dosy Look Demo</h1>

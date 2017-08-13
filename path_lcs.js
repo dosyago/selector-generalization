@@ -22,6 +22,7 @@
   const utils = require('./utils.js');
   
   const lcs_path = {
+    any_mode : true,
     get_canonical_path(node) {
       const path = [];
       const class_path = [];
@@ -120,7 +121,6 @@
           /**
             const tag1 = utils.get_tag_or_any(path1[i1]);
             const tag2 = utils.get_tag_or_any(path2[i2]);
-            console.log(tag1,tag2);
             let tag_mismatch_penalty = 0;
             if ( tag1 != tag2 && false ) {
               tag_mismatch_penalty = 0.5;
@@ -171,15 +171,17 @@
         return {row:row_index,column:column_index,value:max};  
       }
       function lcs_read(s,x,y,i,j) {
-        console.log( last_match_i, i, x[i], "\n", last_match_j, j, y[j] );
         if(i <= 0 || j <= 0 ) {
           return [];
         }
         
-        let xy_intersection = utils.any_intersection(x[i],y[j]);
-        console.log(xy_intersection);
+        let xy_intersection;
+        if ( lcs_path.any_mode ) {
+          xy_intersection = utils.any_intersection(x[i],y[j]);
+        } else {
+          xy_intersection = utils.intersection(x[i],y[j]);
+        }
         if(!!xy_intersection) {
-          console.log(xy_intersection);
           if(last_match_i-i == 1 && last_match_j-j == 1) {
             last_match_i = i;
             last_match_j = j;
@@ -225,20 +227,10 @@
           } else if(level_sig.indexOf("TAG:") == 0) {
             // it's a tag name
             let tag_name = level_sig.slice(4);
-            if(!tag_name) {
-              console.warn("Really this happens?", level_sig );
-              invalid_tag = true;
-              if(selector.length > 0) {
-                if(selector[selector.length-1] == '>') {
-                  selector.pop();
-                }
-              }
-            } else {
-              if(!tag_id) {
-                tag_id = '';
-              }
-              tag_id = tag_name+tag_id;
+            if(!tag_id) {
+              tag_id = '';
             }
+            tag_id = tag_name+tag_id;
           } else if(level_sig.indexOf("IDX:") == 0) {
             // it's an tag nth of type index. Use it if we have a tagname
             if(!!tag_id) {

@@ -43,6 +43,8 @@
           el.style.filter = "none";
           el.style.background = "none";
         });
+      } else if ( e.target.id == 'any_mode' ) {
+        sg.any_mode = e.target.checked;
       } else {
         if ( navigable.has( e.target.tagName ) ) {
           e.preventDefault();
