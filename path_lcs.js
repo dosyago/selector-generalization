@@ -24,25 +24,29 @@
   let current_code = 0;
   
   const lcs_path = {
-    any_mode : true,
+    any_mode : false,
     next_code() {
       current_code += MAX_DEPTH;
       return current_code;
     },
-    get_code_diff( last_level, level ) {
-      console.log(last_level, level);
+    get_code_diff(last_level, level) {
+      const lcode = utils.get_code(last_level);
+      const code = utils.get_code(level);
+      return lcode - code;
+    },
+    is_one_level( last_level, level ) {
       const {xcode,ycode} = last_level;
       const xdif = xcode - level.xcode;
       const ydif = ycode - level.ycode;
-      const diffs = [12321,xdif,ydif].filter( n => !Number.isNaN(n));
-      return Math.min(...diffs);
+      const one_level = xdif == 1 && ydif == 1;
+      return one_level;
     },
     get_canonical_path(node) {
       const path = [];
       const class_path = [];
       const canonical_path = [];
       let code = lcs_path.next_code();
-      while(!!node && node.tagName !== 'HTML') {
+      while(!!node && !(node instanceof Document)) {
         if(!node.parentNode && !!node.host) {
           // FIXME: possible issue from spec updates
           // with the new changes in Shadow DOM v1
@@ -165,21 +169,25 @@
       const lcs_selector = lcs_read(score_matrix,path1,path2,max_value_index.row,max_value_index.column);
 
       // add codes
-        const has_code = utils.get_code( lcs_selector[0] );
-        if ( !has_code ) {
+        if ( lcs_selector.length ) {
           let code = lcs_path.next_code();
           let last_level = lcs_selector[0];
           last_level[`code${code}`] = 1;
           for( let i = 1; i < lcs_selector.length; i++ ) {
             const level = lcs_selector[i];
-            const diff = lcs_path.get_code_diff( last_level, level );
-            if ( diff > 0 ) {
-              code -= diff;
+            const is_one_level = lcs_path.is_one_level( last_level, level );
+            if ( is_one_level ) {
+              code -= 1;
             }
             last_level = level;
             last_level[`code${code}`] = 1;
           }
         }
+
+        lcs_selector.forEach( level => {
+          delete level.xcode;
+          delete level.ycode;
+        });
 
       return {value:lcs_selector,score:max_value_index.value};  
 
@@ -237,7 +245,6 @@
         for( let i = 1; i < path.length; i++ ) {
           const level = path[i];
           const diff = lcs_path.get_code_diff(last_level,level);
-          console.log("DIFF", diff );
           if ( diff == 1 ) {
             path.splice( i, 0, {'>': 1});
           }
