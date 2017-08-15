@@ -97,6 +97,7 @@
             canonical_level["IDX:"+index_name] = 1;  
             canonical_path.unshift(canonical_level);
         }
+        canonical_path.unshift({'>':1});
         node = node.parentNode;
       }      
       canonical_path.unshift({});
@@ -270,6 +271,10 @@
       const selector_str = selector.join(' ');
       return selector_str;
     },    
+    /*
+      The assumption that we have canonical paths
+      In basic is false. We may have 1 canonical path and one generalized
+    */
     basic_multiple_lcs_from_canonical_path_list(list) {
       if(list.length == 0) {
         return [];
