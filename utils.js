@@ -11,6 +11,14 @@
       }
       return pairs;
     }
+    ,get_code(o) {
+      const codekey = Object.keys(o).find( k => k.startsWith('code') );
+      if ( !codekey ) {
+        return 0;
+      } else {
+        return parseInt( codekey.slice(4) );
+      }
+    }
     ,get_tag(o) {
       return Object.keys(o).find( k => k.startsWith('TAG:') );
     }
