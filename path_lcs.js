@@ -52,7 +52,7 @@
       const class_path = [];
       const canonical_path = [];
       let code = lcs_path.next_code();
-      while(!!node && !(node instanceof Document)) {
+      while(!!node && node.tagName != 'HTML' ) {
         if(!node.parentNode && !!node.host) {
           // FIXME: possible issue from spec updates
           // with the new changes in Shadow DOM v1
@@ -148,17 +148,8 @@
       for(i1 = 1; i1 < path1.length; i1 += 1 ) {
         for(i2 = 1; i2 < path2.length; i2 += 1 ) {
           const quotient = utils.order(utils.intersection(path1[i1],path2[i2]))/utils.order(utils.union(path1[i1],path2[i2]));
-          let tag_mismatch_penalty=0;
-          /**
-            const tag1 = utils.get_tag_or_any(path1[i1]);
-            const tag2 = utils.get_tag_or_any(path2[i2]);
-            let tag_mismatch_penalty = 0;
-            if ( tag1 != tag2 && false ) {
-              tag_mismatch_penalty = 0.5;
-            }
-          **/
           address = path2.length*i1+i2;
-          path1_path2_match_score = score_matrix[address-path2.length-1]+quotient-tag_mismatch_penalty;
+          path1_path2_match_score = score_matrix[address-path2.length-1]+quotient;
           path1_insert_score = score_matrix[address-1];
           path2_insert_score = score_matrix[address-path2.length];
           score_matrix[address] = Math.max(path1_insert_score,path1_path2_match_score,path2_insert_score);

@@ -19,16 +19,19 @@
         return parseInt( codekey.slice(4) );
       }
     }
-    ,get_tag(o) {
-      return Object.keys(o).find( k => k.startsWith('TAG:') );
-    }
-    ,get_tag_or_any(o) {
+    ,get_tag_or_any(e,o) {
+      const eset = new Set(e.split(/\s*,\s*/g));
+      console.log(e,o);
       const tag = Object.keys(o).find( k => k.startsWith('TAG:') );
       const any = Object.keys(o).find( k => k.startsWith(':-webkit-any') );
       if ( !! tag ) {
-        return tag.slice(4);
+        return [...new Set([...eset, tag.slice(4)])].join(',').trim();
       } else if ( !! any ) {
-        return any.slice(13,-1);
+        const parts = any.slice(13,-1).split(/\s*,\s*/g);
+        const anyset = new Set([...eset, ...parts]);
+        return [...anyset].join(',').trim();
+      } else {
+        return '*';
       }
     }
     ,any_intersection(dic1,dic2) {
@@ -45,11 +48,11 @@
           i[key] = 1;
           empty = false;
         } else if ( key.startsWith('TAG:') ) {
-          tag = `:-webkit-any( ${key.slice(4)}, ${utils.get_tag_or_any(dic2)})`;
+          tag = `:-webkit-any(${utils.get_tag_or_any(key.slice(4),dic2)})`;
           i[tag] = 1; 
           empty = false;
         } else if ( key.startsWith(":-webkit-any" ) ) {
-          tag = `:-webkit-any( ${key.slice(13,-1)}, ${utils.get_tag_or_any(dic2)})`;
+          tag = `:-webkit-any(${utils.get_tag_or_any(key.slice(13,-1),dic2)})`;
           i[tag] = 1; 
           empty = false;
         }
