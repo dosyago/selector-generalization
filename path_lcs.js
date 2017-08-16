@@ -54,20 +54,12 @@
       let code = lcs_path.next_code();
       while(!!node && node.tagName != 'HTML') {
         if(!node.parentNode && !!node.host) {
-          // FIXME: possible issue from spec updates
-          // with the new changes in Shadow DOM v1
-          // these selectors may no longer work even in the dynamic profile
-          // so I may need to remove this code or find a workaround
+          // Issue: this is only here for reference when we add in updated shadow dom support, or remove this code
           node = node.host;
           const shadow_level = {};
           shadow_level["TAG:"+node.tagName+"::shadow"] = 1;
           canonical_path.unshift(shadow_level);
         } else { 
-          // TODO: add more information issue #8
-            // add some way to add more information
-            // such as other attributes, like src, href, type
-            // value, aria-role, itemprop, maybe data- and so on
-            // and some way to handle it in the algorithm
           const canonical_level = {};
 
           // make the level 
@@ -100,8 +92,7 @@
                 classes = node.className;
               }
               if(typeof classes !== 'string') {
-                // for SVG the className is an object. 
-                // add a fallback ( which ought to have been prevented by getAttribute above )
+                // fallback for SVG the className is an object. 
                 try {
                   classes = Array.from( node.classList );
                 } catch(e) {
@@ -268,40 +259,29 @@
         }
         const classes = [];
         const level_sigs = Object.keys(levelset);
-        // FIXME:
-        // this non obvious line is critical
-        // it ensures that tag comes before IDX
-        // this ought to be done another way
-        // instead of dependent on the prefix we use 
-        // to identify parts
+        // Issue #34: if we update the data type and no longer depend on this sorted order
         level_sigs.sort().reverse();
         let tag_id = undefined;
         let invalid_tag = false;
 
         level_sigs.forEach( level_sig => {
           if(level_sig.indexOf("#") == 0) {
-            //it's a tag id
             if(!tag_id) {
               tag_id = '';
             }
             tag_id = tag_id + level_sig;
           } else if(level_sig.indexOf("TAG:") == 0) {
-            // it's a tag name
             let tag_name = level_sig.slice(4);
             if(!tag_id) {
               tag_id = '';
             }
             tag_id = tag_name+tag_id;
           } else if(level_sig.indexOf("IDX:") == 0) {
-            // it's an tag nth of type index. Use it with tagname
-            // otherwise use a wildcard
-            // OOO, wildcard
             if ( !tag_id ) {
               tag_id = '*';
             }
             tag_id = tag_id + level_sig.slice(4);
           } else {
-            // it's a class name
             if ( level_sig !== 'xcode' && level_sig !== 'ycode' && !level_sig.startsWith('code')) {
               classes.push(level_sig);
             }
