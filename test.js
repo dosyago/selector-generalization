@@ -55,19 +55,27 @@
       if( e.target.id == 'generalize' ) {
         const {positive,negative} = sg.generalize( [...set], [...neg_set] );
         generalized_selector.innerText = `${positive} !(${negative})` || 'n/a';
+
         found.forEach( el => {
           el.style.filter = "none";
           el.style.background = "none";
         });
-        found = Array.from( document.querySelectorAll(positive) );
+
+        try { 
+          found = Array.from( document.querySelectorAll(positive) );
+        } catch(e) {
+          console.warn(" Error on query selector", e );
+          console.warn("Note, MS Edge and IE do not support ':matches' or ':any' as of the time I wrote this code, August 16 2017");
+        }
+
         if ( !!negative ) {
           const remove = new Set( Array.from( document.querySelectorAll(negative) ) );
           found = found.filter( el => ! remove.has( el ) );
         }
+
         found_count.innerText = found.length;
         const result = validate( set, found, neg_set );
         console.log(" Test result?", result );
-        console.log( "\npos", positive, "\nneg", negative, "\npset", set, "\nnset", neg_set, "\nfound", found );
         Array.from( set ).forEach( el => {
           el.style.outline = "3px dashed lime";
         });

@@ -21,7 +21,7 @@
 {
   const utils = require('./utils.js');
   const MAX_DEPTH = 10000;
-  let current_code = 0;
+  let current_code = 2;
   
   const lcs_path = {
     any_mode : false,
@@ -34,25 +34,25 @@
       const code = utils.get_code(level);
       return lcode - code;
     },
-    is_one_level( last_level, level ) {
+    diffs( last_level, level ) {
       const {xcode,ycode} = last_level;
       const xdif = xcode - level.xcode;
       const ydif = ycode - level.ycode;
-      const one_level = xdif == 1 && ydif == 1;
-      return one_level;
+      return [xdif, ydif];
+    },
+    is_one_level( last_level, level ) {
+      const [xdif, ydif] = [...lcs_path.diffs(last_level, level )];
+      return xdif == 1 && ydif == 1;
     },
     max_diff( last_level, level ) {
-      const {xcode,ycode} = last_level;
-      const xdif = xcode - level.xcode;
-      const ydif = ycode - level.ycode;
-      return Math.max( xdif, ydif );
+      return Math.max( ...lcs_path.diffs( last_level, level ) );
     },
     get_canonical_path(node) {
       const path = [];
       const class_path = [];
       const canonical_path = [];
       let code = lcs_path.next_code();
-      while(!!node && node.tagName != 'HTML' ) {
+      while(!!node && node.tagName != 'HTML') {
         if(!node.parentNode && !!node.host) {
           // FIXME: possible issue from spec updates
           // with the new changes in Shadow DOM v1
@@ -163,7 +163,10 @@
       const max_value_index = find_max_value_index(score_matrix,path1,path2);
       let last_match_i = max_value_index.row;
       let last_match_j = max_value_index.column;
-      const lcs_selector = lcs_read(score_matrix,path1,path2,max_value_index.row,max_value_index.column);
+      if ( Number.isNaN( last_match_i ) || Number.isNaN( last_match_j ) ) {
+        throw "BAD NAN!!!";
+      }
+      const lcs_selector = lcs_read(score_matrix,path1,path2,last_match_i, last_match_j);
 
       // add codes
         if ( lcs_selector.length ) {
@@ -191,20 +194,25 @@
       return {value:lcs_selector,score:max_value_index.value};  
 
       function find_max_value_index(s,x,y) {
-        let max = 0;
+        let value = 0;
         let max_index = s.length-1;
         for(let i = 0; i < s.length; i += 1) {
-          if(s[i] >= max) {
-            max = s[i];
+          if(s[i] >= value) {
+            value = s[i];
             max_index = i;  
           }  
         }
-        const column_index = max_index % y.length;
-        const row_index = (max_index-column_index)/y.length;
-        return {row:row_index,column:column_index,value:max};  
+        if ( y.length ) {
+          const column = max_index % y.length;
+          const row = (max_index-column)/y.length;
+          return { row, column, value };
+        } else {
+          return { row: 0, column: 0, value };
+        }
       }
+
       function lcs_read(s,x,y,i,j) {
-        if ( i < 0 || j < 0 ) {
+        if ( i <= 0 || j <= 0 ) {
           return [];
         }
         
@@ -220,7 +228,6 @@
           Object.assign( xy_intersection, {
             xcode, ycode
           });
-          //console.log(JSON.stringify(x[i]),JSON.stringify(y[j]), JSON.stringify(xy_intersection));
           return lcs_read(s,x,y,i-1,j-1).concat([xy_intersection]);
         } else {
           let score_insert_y = s[i*y.length+j-1];
