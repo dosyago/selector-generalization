@@ -197,7 +197,6 @@
           delete level.ycode;
         });
 
-      console.log(lcs_selector);
       return {value:lcs_selector,score:max_value_index.value};  
 
       function find_max_value_index(s,x,y) {
@@ -214,7 +213,7 @@
         return {row:row_index,column:column_index,value:max};  
       }
       function lcs_read(s,x,y,i,j) {
-        if(i < 0 || j < 0 ) {
+        if ( i < 0 || j < 0 ) {
           return [];
         }
         
