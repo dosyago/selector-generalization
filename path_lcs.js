@@ -60,7 +60,12 @@
           shadow_level["TAG:"+node.tagName+"::shadow"] = 1;
           canonical_path.unshift(shadow_level);
         } else { 
-          const canonical_level = {};
+          const canonical_level = {
+            tags: new Set(),
+            geometry: new Set(),
+            classes: new Set(),
+            ids: new Set()
+          };
 
           // make the level 
             // get index_name ( like nth-of-type(n) )
@@ -81,7 +86,7 @@
 
             // add id ( if any ) to canonical level 
               if(!!node.id && node.id.length > 0) {
-                canonical_level[`#${node.id}`] = 1;
+                canonical_level.ids.add( node.id );
               }
 
             // get classes 
@@ -105,16 +110,17 @@
             // add class words to canonical_level 
               classes.forEach( classword => {
                 if(classword.length > 0) {
-                  canonical_level['.'+classword] = 1;
+                  canonical_level.classes.add(`.${classword}`);
                 }
               });
 
             // add tag and index_name to canonical level 
-              canonical_level["TAG:"+node.tagName] = 1;  
-              canonical_level["IDX:"+index_name] = 1;  
+              canonical_level.tags.add(node.tagName); 
+              canonical_level.geometry.add(index_name); 
+
 
             // add code
-              canonical_level[`code${code}`] = 1;
+              canonical_level.code = code;
               code += 1;
           
           canonical_path.unshift(canonical_level);
