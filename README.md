@@ -21,3 +21,12 @@ When you want to see the generalized selector, click 'generalize'
 When you want to clear the example set, click 'clear'
 
 If you notice something weird, open an issue! :thumbsup: 
+
+## Dev Notes
+
+- *Wednesday August 16 2017*
+ - All the current open issues are improvements. Some of improvements to `:any` and others are just improvements.
+ - None of these currently can be done because:
+  1. I need to think more about `:any` and
+  2. The other improvements either need to be thought more about as well, or depend on some human interface element being made,
+  (for example), the composition issue
