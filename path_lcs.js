@@ -41,6 +41,12 @@
       const one_level = xdif == 1 && ydif == 1;
       return one_level;
     },
+    max_diff( last_level, level ) {
+      const {xcode,ycode} = last_level;
+      const xdif = xcode - level.xcode;
+      const ydif = ycode - level.ycode;
+      return Math.max( xdif, ydif );
+    },
     get_canonical_path(node) {
       const path = [];
       const class_path = [];
@@ -178,9 +184,11 @@
             const is_one_level = lcs_path.is_one_level( last_level, level );
             if ( is_one_level ) {
               code -= 1;
+            } else {
+              code -= lcs_path.max_diff( last_level, level );
             }
+            level[`code${code}`] = 1;
             last_level = level;
-            last_level[`code${code}`] = 1;
           }
         }
 
@@ -189,6 +197,7 @@
           delete level.ycode;
         });
 
+      console.log(lcs_selector);
       return {value:lcs_selector,score:max_value_index.value};  
 
       function find_max_value_index(s,x,y) {
@@ -205,7 +214,7 @@
         return {row:row_index,column:column_index,value:max};  
       }
       function lcs_read(s,x,y,i,j) {
-        if(i <= 0 || j <= 0 ) {
+        if(i < 0 || j < 0 ) {
           return [];
         }
         
@@ -221,6 +230,7 @@
           Object.assign( xy_intersection, {
             xcode, ycode
           });
+          //console.log(JSON.stringify(x[i]),JSON.stringify(y[j]), JSON.stringify(xy_intersection));
           return lcs_read(s,x,y,i-1,j-1).concat([xy_intersection]);
         } else {
           let score_insert_y = s[i*y.length+j-1];
@@ -316,10 +326,6 @@
       const selector_str = selector.join(' ');
       return selector_str;
     },    
-    /*
-      The assumption that we have canonical paths
-      In basic is false. We may have 1 canonical path and one generalized
-    */
     basic_multiple_lcs_from_canonical_path_list(list) {
       if(list.length == 0) {
         return [];
@@ -334,56 +340,6 @@
         }
       }
       return path2;  
-    },
-    tournament_multiple_lcs_from_canonical_path_list(list) {
-      const pairs = utils.all_pairs(list);
-      const quadtuples = [];
-
-      pairs.forEach( pair => {
-        const pairlcs = lcs_path.lcs_from_canonical_path_pair(pair[0],pair[1]);
-        const quadtuple = {score:pairlcs.score,lcs:pairlcs.value,p1:pair[0],p2:pair[1]};
-        quadtuples.push(quadtuple);
-      });    
-
-      quadtuples.sort( (a,b) => {
-        if(a.score < b.score) {
-          return -1;
-        } else if(a.score > b.score) {
-          return 1;
-        } else if(a.lcs.length < b.lcs.length) {
-          return -1;
-        } else if(a.lcs.length > b.lcs.length) {
-          return 1;
-        } else {
-          return 0;
-        } 
-      });
-
-      const tournament_matches = [];
-      const paired = {};
-      let hash_value = 0;
-
-      quadtuples.forEach( q4 => {
-        const p1 = q4.p1;
-        const p2 = q4.p2;
-        if(!!p1.hash_id || !!p2.hash_id) {
-          return; // we have seen these
-        } else {
-          p1.hash_id = hash_value;
-          paired[hash_value] = p1;
-          hash_value += 1;
-          p2.hash_id = hash_value;
-          paired[hash_value] = p2;
-          hash_value += 1;
-          tournament_matches.push(q4.lcs);  
-        }  
-      });
-
-      if(tournament_matches.length > 1) {
-        return lcs_path.tournament_multiple_lcs_from_canonical_path_list(tournament_matches); 
-      } else {
-        return tournament_matches[0];
-      }    
     }
   };
 

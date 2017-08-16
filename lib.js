@@ -23,10 +23,9 @@
       const n_els = n_sels.map( sel => isEl( sel ) ? sel : document.querySelector(sel) );
       const p_paths = p_els.map( el => path_lcs.get_canonical_path( el, false ).canonical );
       const n_paths = n_els.map( el => path_lcs.get_canonical_path( el, true ).canonical );
-      const basic = path_lcs.basic_multiple_lcs_from_canonical_path_list( p_paths );
-      const p_tournament = path_lcs.tournament_multiple_lcs_from_canonical_path_list( p_paths );
-      const n_tournament = path_lcs.tournament_multiple_lcs_from_canonical_path_list( n_paths );
-      return { p_tournament, n_tournament };
+      const p_basic = path_lcs.basic_multiple_lcs_from_canonical_path_list( p_paths );
+      const n_basic = path_lcs.basic_multiple_lcs_from_canonical_path_list( n_paths );
+      return { p_basic, n_basic };
     }
 
   // simplification ( by heuristics )
@@ -42,8 +41,8 @@
   function generalize( p_sels, n_sels ) {
     // run mlcs on sels
     const mlcs_path = run_mlcs( p_sels, n_sels );
-    const p_mlcs_sel = path_lcs.selector_from_canonical_path( mlcs_path.p_tournament || [] );
-    const n_mlcs_sel = path_lcs.selector_from_canonical_path( mlcs_path.n_tournament || [] );
+    const p_mlcs_sel = path_lcs.selector_from_canonical_path( mlcs_path.p_basic || [] );
+    const n_mlcs_sel = path_lcs.selector_from_canonical_path( mlcs_path.n_basic || [] );
     const p_simplified_sel = heuristically_simplify_sel( p_mlcs_sel );
     const n_simplified_sel = heuristically_simplify_sel( n_mlcs_sel );
     return { positive: p_simplified_sel, negative: n_simplified_sel };
