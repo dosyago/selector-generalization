@@ -26,33 +26,11 @@
   
   const path_lcs = {
     any_mode : false,
-    next_code() {
-      current_code += MAX_DEPTH;
-      return current_code;
-    },
-    get_code_diff(last_level, level) {
-      const lcode = utils.get_code(last_level);
-      const code = utils.get_code(level);
-      return lcode - code;
-    },
-    diffs( last_level, level ) {
-      const {xcode,ycode} = last_level;
-      const xdif = xcode - level.xcode;
-      const ydif = ycode - level.ycode;
-      return [xdif, ydif];
-    },
-    is_one_level( last_level, level ) {
-      const [xdif, ydif] = [...path_lcs.diffs(last_level, level )];
-      return xdif == 1 && ydif == 1;
-    },
-    max_diff( last_level, level ) {
-      return Math.max( ...path_lcs.diffs( last_level, level ) );
-    },
     get_canonical_path(node) {
       const path = [];
       const class_path = [];
       const canonical_path = [];
-      let code = path_lcs.next_code();
+      let code = next_code();
       while(!!node && node.tagName != 'HTML') {
         if(!node.parentNode && !!node.host) {
           // Issue: this is only here for reference when we add in updated shadow dom support, or remove this code
@@ -131,59 +109,6 @@
       canonical_path.unshift({});
       return {canonical:canonical_path};
     },
-    lcs_from_canonical_path_pair(path1,path2) {
-      const score_matrix = new Float32Array(new ArrayBuffer(4*path1.length*path2.length));
-      const row_offset = path2.length;
-      let i1,i2;
-      let address;
-      let path1_path2_match_score, path1_insert_score, path2_insert_score;
-      
-      for(i1 = 1; i1 < path1.length; i1 += 1 ) {
-        for(i2 = 1; i2 < path2.length; i2 += 1 ) {
-          const union_order = utils.order(utils.union(path1[i1],path2[i2]));
-          let quotient = 0;
-          if ( union_order ) {
-            quotient = utils.order(utils.intersection(path1[i1],path2[i2]))/union_order;
-          }
-          address = path2.length*i1+i2;
-          path1_path2_match_score = score_matrix[address-path2.length-1]+quotient;
-          path1_insert_score = score_matrix[address-1];
-          path2_insert_score = score_matrix[address-path2.length];
-          score_matrix[address] = Math.max(path1_insert_score,path1_path2_match_score,path2_insert_score);
-        }
-      }  
-
-      const max_value_index = find_max_value_index(score_matrix,path1,path2);
-      let last_match_i = max_value_index.row;
-      let last_match_j = max_value_index.column;
-      const lcs_selector = lcs_read(score_matrix,path1,path2,last_match_i, last_match_j);
-
-      // add codes
-        if ( lcs_selector.length ) {
-          let code = path_lcs.next_code();
-          let last_level = lcs_selector[0];
-          last_level.code = code;
-          for( let i = 1; i < lcs_selector.length; i++ ) {
-            const level = lcs_selector[i];
-            const is_one_level = path_lcs.is_one_level( last_level, level );
-            if ( is_one_level ) {
-              code -= 1;
-            } else {
-              code -= path_lcs.max_diff( last_level, level );
-            }
-            level.code = code;
-            last_level = level;
-          }
-        }
-
-        lcs_selector.forEach( level => {
-          delete level.xcode;
-          delete level.ycode;
-        });
-
-      return {value:lcs_selector,score:max_value_index.value};  
-
-    },
     selector_from_canonical_path(path) {
       vendor = vendor || require('./vendor.js').get_prefix();
       path = Array.from(path);
@@ -197,7 +122,7 @@
         let last_level = path[0];
         for( let i = 1; i < path.length; i++ ) {
           const level = path[i];
-          const diff = path_lcs.get_code_diff(last_level,level);
+          const diff = get_code_diff(last_level,level);
           if ( diff == 1 ) {
             path.splice( i, 0, {'>': 1});
           }
@@ -249,7 +174,7 @@
       let path1;
       for(let i = 1; i < list.length; i+=1 ) {
         path1 = list[i];
-        const lcs = path_lcs.lcs_from_canonical_path_pair(path1,path2);
+        const lcs = lcs_from_canonical_path_pair(path1,path2);
         if(!!lcs) {
           path2 = lcs.value;
         }
@@ -305,6 +230,86 @@
           return lcs_read(s,x,y,i-1,j);
         }
       }
+    }
+
+    function next_code() {
+      current_code += MAX_DEPTH;
+      return current_code;
+    }
+
+    function get_code_diff(last_level, level) {
+      const lcode = utils.get_code(last_level);
+      const code = utils.get_code(level);
+      return lcode - code;
+    }
+
+    function diffs( last_level, level ) {
+      const {xcode,ycode} = last_level;
+      const xdif = xcode - level.xcode;
+      const ydif = ycode - level.ycode;
+      return [xdif, ydif];
+    }
+
+    function isOneLevel( last_level, level ) {
+      const [xdif, ydif] = [...diffs(last_level, level )];
+      return xdif == 1 && ydif == 1;
+    }
+
+    function max_diff( last_level, level ) {
+      return Math.max( ...diffs( last_level, level ) );
+    }
+
+    function lcs_from_canonical_path_pair(path1,path2) {
+      const score_matrix = new Float32Array(new ArrayBuffer(4*path1.length*path2.length));
+      const row_offset = path2.length;
+      let i1,i2;
+      let address;
+      let path1_path2_match_score, path1_insert_score, path2_insert_score;
+      
+      for(i1 = 1; i1 < path1.length; i1 += 1 ) {
+        for(i2 = 1; i2 < path2.length; i2 += 1 ) {
+          const union_order = utils.order(utils.union(path1[i1],path2[i2]));
+          let quotient = 0;
+          if ( union_order ) {
+            quotient = utils.order(utils.intersection(path1[i1],path2[i2]))/union_order;
+          }
+          address = path2.length*i1+i2;
+          path1_path2_match_score = score_matrix[address-path2.length-1]+quotient;
+          path1_insert_score = score_matrix[address-1];
+          path2_insert_score = score_matrix[address-path2.length];
+          score_matrix[address] = Math.max(path1_insert_score,path1_path2_match_score,path2_insert_score);
+        }
+      }  
+
+      const max_value_index = find_max_value_index(score_matrix,path1,path2);
+      let last_match_i = max_value_index.row;
+      let last_match_j = max_value_index.column;
+      const lcs_selector = lcs_read(score_matrix,path1,path2,last_match_i, last_match_j);
+
+      // add codes
+        if ( lcs_selector.length ) {
+          let code = next_code();
+          let last_level = lcs_selector[0];
+          last_level.code = code;
+          for( let i = 1; i < lcs_selector.length; i++ ) {
+            const level = lcs_selector[i];
+            const is_one_level = isOneLevel( last_level, level );
+            if ( is_one_level ) {
+              code -= 1;
+            } else {
+              code -= max_diff( last_level, level );
+            }
+            level.code = code;
+            last_level = level;
+          }
+        }
+
+        lcs_selector.forEach( level => {
+          delete level.xcode;
+          delete level.ycode;
+        });
+
+      return {value:lcs_selector,score:max_value_index.value};  
     }
 
   module.exports = path_lcs;
