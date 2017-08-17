@@ -183,53 +183,6 @@
 
       return {value:lcs_selector,score:max_value_index.value};  
 
-      function find_max_value_index(s,x,y) {
-        let value = 0;
-        let max_index = s.length-1;
-        for(let i = 0; i < s.length; i += 1) {
-          if(s[i] >= value) {
-            value = s[i];
-            max_index = i;  
-          }  
-        }
-        if ( y.length ) {
-          const column = max_index % y.length;
-          const row = (max_index-column)/y.length;
-          return { row, column, value };
-        } else {
-          return { row: 0, column: 0, value };
-        }
-      }
-
-      function lcs_read(s,x,y,i,j) {
-        if ( i <= 0 || j <= 0 ) {
-          return [];
-        }
-        
-        let xy_intersection;
-        if ( path_lcs.any_mode ) {
-          xy_intersection = utils.any_intersection(x[i],y[j]);
-        } else {
-          xy_intersection = utils.intersection(x[i],y[j]);
-        }
-        const order = utils.order(xy_intersection);
-        if(!!order) {
-          const xcode = utils.get_code(x[i]);
-          const ycode = utils.get_code(y[j]);
-          Object.assign( xy_intersection, {
-            xcode, ycode
-          });
-          return lcs_read(s,x,y,i-1,j-1).concat([xy_intersection]);
-        } else {
-          let score_insert_y = s[i*y.length+j-1];
-          let score_insert_x = s[(i-1)*y.length+j];
-          if(score_insert_y > score_insert_x) {
-            return lcs_read(s,x,y,i,j-1);
-          } else {
-            return lcs_read(s,x,y,i-1,j);
-          }
-        }
-      }
     },
     selector_from_canonical_path(path) {
       vendor = vendor || require('./vendor.js').get_prefix();
@@ -304,6 +257,55 @@
       return path2;  
     }
   };
+
+  // helpers 
+    function find_max_value_index(s,x,y) {
+      let value = 0;
+      let max_index = s.length-1;
+      for(let i = 0; i < s.length; i += 1) {
+        if(s[i] >= value) {
+          value = s[i];
+          max_index = i;  
+        }  
+      }
+      if ( y.length ) {
+        const column = max_index % y.length;
+        const row = (max_index-column)/y.length;
+        return { row, column, value };
+      } else {
+        return { row: 0, column: 0, value };
+      }
+    }
+
+    function lcs_read(s,x,y,i,j) {
+      if ( i <= 0 || j <= 0 ) {
+        return [];
+      }
+      
+      let xy_intersection;
+      if ( path_lcs.any_mode ) {
+        xy_intersection = utils.any_intersection(x[i],y[j]);
+      } else {
+        xy_intersection = utils.intersection(x[i],y[j]);
+      }
+      const order = utils.order(xy_intersection);
+      if(!!order) {
+        const xcode = utils.get_code(x[i]);
+        const ycode = utils.get_code(y[j]);
+        Object.assign( xy_intersection, {
+          xcode, ycode
+        });
+        return lcs_read(s,x,y,i-1,j-1).concat([xy_intersection]);
+      } else {
+        let score_insert_y = s[i*y.length+j-1];
+        let score_insert_x = s[(i-1)*y.length+j];
+        if(score_insert_y > score_insert_x) {
+          return lcs_read(s,x,y,i,j-1);
+        } else {
+          return lcs_read(s,x,y,i-1,j);
+        }
+      }
+    }
 
   module.exports = path_lcs;
 }

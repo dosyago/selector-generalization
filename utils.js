@@ -8,13 +8,6 @@
     'geometry'
   ];
 
-  function and(s1,s2) {
-    return new Set( [...s1].filter( el => s2.has(el) ) );
-  }
-  function or(s1,s2) {
-    return new Set( [...s1, ...s2] );
-  }
-
   const utils = {
     get_code(o) {
       return o.code;
@@ -55,6 +48,14 @@
       return slots.reduce( (a, s) => a + dic[s].size, 0 );
     }
   };
+
+  // helpers 
+    function and(s1,s2) {
+      return new Set( [...s1].filter( el => s2.has(el) ) );
+    }
+    function or(s1,s2) {
+      return new Set( [...s1, ...s2] );
+    }
 
   module.exports = utils;
 }
