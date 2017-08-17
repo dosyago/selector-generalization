@@ -21,6 +21,7 @@
 {
   const utils = require('./utils.js');
   const MAX_DEPTH = 10000;
+  let vendor;
   let current_code = 2;
   
   const path_lcs = {
@@ -139,7 +140,11 @@
       
       for(i1 = 1; i1 < path1.length; i1 += 1 ) {
         for(i2 = 1; i2 < path2.length; i2 += 1 ) {
-          const quotient = utils.order(utils.intersection(path1[i1],path2[i2]))/utils.order(utils.union(path1[i1],path2[i2]));
+          const union_order = utils.order(utils.union(path1[i1],path2[i2]));
+          let quotient = 0;
+          if ( union_order ) {
+            quotient = utils.order(utils.intersection(path1[i1],path2[i2]))/union_order;
+          }
           address = path2.length*i1+i2;
           path1_path2_match_score = score_matrix[address-path2.length-1]+quotient;
           path1_insert_score = score_matrix[address-1];
@@ -151,16 +156,13 @@
       const max_value_index = find_max_value_index(score_matrix,path1,path2);
       let last_match_i = max_value_index.row;
       let last_match_j = max_value_index.column;
-      if ( Number.isNaN( last_match_i ) || Number.isNaN( last_match_j ) ) {
-        throw "BAD NAN!!!";
-      }
       const lcs_selector = lcs_read(score_matrix,path1,path2,last_match_i, last_match_j);
 
       // add codes
         if ( lcs_selector.length ) {
           let code = path_lcs.next_code();
           let last_level = lcs_selector[0];
-          last_level[`code${code}`] = 1;
+          last_level.code = code;
           for( let i = 1; i < lcs_selector.length; i++ ) {
             const level = lcs_selector[i];
             const is_one_level = path_lcs.is_one_level( last_level, level );
@@ -169,7 +171,7 @@
             } else {
               code -= path_lcs.max_diff( last_level, level );
             }
-            level[`code${code}`] = 1;
+            level.code = code;
             last_level = level;
           }
         }
@@ -210,7 +212,8 @@
         } else {
           xy_intersection = utils.intersection(x[i],y[j]);
         }
-        if(!!xy_intersection) {
+        const order = utils.order(xy_intersection);
+        if(!!order) {
           const xcode = utils.get_code(x[i]);
           const ycode = utils.get_code(y[j]);
           Object.assign( xy_intersection, {
@@ -229,7 +232,9 @@
       }
     },
     selector_from_canonical_path(path) {
+      vendor = vendor || require('./vendor.js').get_prefix();
       path = Array.from(path);
+      console.log(path);
       if ( path.length == 0 ) {
         return '';
       }
@@ -268,7 +273,7 @@
         }
 
         if ( classes.size) {
-          level_sel += `.${[...classes].join('.')}`;
+          level_sel += `${[...classes].join('')}`;
         }
 
         if ( geometry.size ) {
