@@ -53,39 +53,22 @@
     });
     document.addEventListener('mouseup', e => {
       if( e.target.id == 'generalize' ) {
-        const {positive,negative} = sg.generalize( [...set], [...neg_set] );
-        generalized_selector.innerText = `${positive} !(${negative})` || 'n/a';
-
-        found.forEach( el => {
-          el.style.filter = "none";
-          el.style.background = "none";
-        });
-
-        try { 
-          found = Array.from( document.querySelectorAll(positive) );
-        } catch(e) {
-          console.warn(" Error on query selector", e );
-          console.warn("Note, MS Edge and IE do not support ':matches' or ':any' as of the time I wrote this code, August 16 2017");
-        }
-
-        if ( !!negative ) {
-          const remove = new Set( Array.from( document.querySelectorAll(negative) ) );
-          found = found.filter( el => ! remove.has( el ) );
-        }
-
-        found_count.innerText = found.length;
-        const result = validate( set, found, neg_set );
-        console.log(" Test result?", result );
-        Array.from( set ).forEach( el => {
-          el.style.outline = "3px dashed lime";
-        });
-        Array.from( neg_set ).forEach( el => {
-          el.style.outline = "3px dashed red";
-        });
-        found.forEach( el => {
-          el.style.filter = "sepia(1)";
-          el.style.background = "lime";
-        });
+        const result1 = gen( set, neg_set, found );
+        if ( ! result1 ) {
+          if ( sg.any_mode ) {
+            sg.any_mode = false;
+          } else {
+            sg.any_mode = true;
+          }
+          const result2 = gen( set, neg_set, found );
+          if ( ! result2 ) {
+            console.log("Test result? false");
+            show_result( set, neg_set, found );
+            return;
+          }
+        } 
+        console.log("Test result? true");
+        show_result( set, neg_set, found );
       } else if ( e.target.id == 'clear' ) {
         Array.from( set ).forEach( el => {
           el.style.outline = "none";
@@ -135,4 +118,47 @@
       }
     });
   }
+  
+  function show_result( set, neg_set, found ) {
+    Array.from( set ).forEach( el => {
+      el.style.outline = "3px dashed lime";
+    });
+    Array.from( neg_set ).forEach( el => {
+      el.style.outline = "3px dashed red";
+    });
+    found.forEach( el => {
+      el.style.filter = "sepia(1)";
+      el.style.background = "lime";
+    });
+  }
+
+  function gen( set, neg_set, found ) {
+    const {positive,negative} = sg.generalize( [...set], [...neg_set] );
+    generalized_selector.innerText = `${positive} !(${negative})` || 'n/a';
+
+    found.forEach( el => {
+      el.style.filter = "none";
+      el.style.background = "none";
+    });
+
+    try { 
+      found.length = 0;
+      found.push( ... Array.from( document.querySelectorAll(positive) ) );
+    } catch(e) {
+      console.warn(" Error on query selector", e );
+      console.warn("Note, MS Edge and IE do not support ':matches' or ':any' as of the time I wrote this code, August 16 2017");
+    }
+
+    if ( !!negative ) {
+      const remove = new Set( Array.from( document.querySelectorAll(negative) ) );
+      const cfound = Array.from(found);
+      found.length = 0;
+      found.push( ...found.filter( el => ! remove.has( el ) ) );
+    }
+
+    found_count.innerText = found.length;
+    const result = validate( set, found, neg_set );
+    return result;
+  }
 }
+

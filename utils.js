@@ -67,6 +67,7 @@
     function and(s1,s2) {
       return new Set( [...s1].filter( el => s2.has(el) ) );
     }
+
     function or(s1,s2) {
       return new Set( [...s1, ...s2] );
     }
@@ -78,7 +79,7 @@
           if ( any_mode ) {
             return score / set_size;
           } else {
-            return score;
+            return score * set_size;
           }
         default:
           return score * set_size;
