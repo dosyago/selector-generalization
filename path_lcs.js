@@ -213,7 +213,7 @@
       } else {
         xy_intersection = utils.intersection(x[i],y[j]);
       }
-      const order = utils.order(xy_intersection);
+      const order = utils.order(xy_intersection, path_lcs.any_mode);
       if(!!order) {
         const xcode = utils.get_code(x[i]);
         const ycode = utils.get_code(y[j]);
@@ -268,10 +268,10 @@
       
       for(i1 = 1; i1 < path1.length; i1 += 1 ) {
         for(i2 = 1; i2 < path2.length; i2 += 1 ) {
-          const union_order = utils.order(utils.union(path1[i1],path2[i2]));
+          const union_order = utils.order(utils.union(path1[i1],path2[i2]), path_lcs.any_mode);
           let quotient = 0;
           if ( union_order ) {
-            quotient = utils.order(utils.intersection(path1[i1],path2[i2]))/union_order;
+            quotient = utils.order(utils.intersection(path1[i1],path2[i2]), path_lcs.any_mode)/union_order;
           }
           address = path2.length*i1+i2;
           path1_path2_match_score = score_matrix[address-path2.length-1]+quotient;
