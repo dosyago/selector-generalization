@@ -8,14 +8,14 @@
     'geometry'
   ];
 
-  const score2 = {
+  const score2_of = {
     tags: 1.0,
     geometry: 0.8,
     ids: 2.0,
     classes: 0.5
   }
 
-  const score = {
+  const score_of = {
     tags: 1.0,
     geometry: 0.5,
     ids: 2.0,
@@ -58,8 +58,8 @@
         return d3;
       }, {});
     }
-    ,order(dic) {
-      return slots.reduce( (a, s) => a + (score[s] * dic[s].size), 0 );
+    ,order(dic, any_mode) {
+      return slots.reduce( (a, s) => a + assign_score(s, dic[s].size, any_mode), 0 );
     }
   };
 
@@ -69,6 +69,20 @@
     }
     function or(s1,s2) {
       return new Set( [...s1, ...s2] );
+    }
+
+    function assign_score( category, set_size, any_mode ) {
+      const score = score_of[category];
+      switch( category ) {
+        case "tags":
+          if ( any_mode ) {
+            return score / set_size;
+          } else {
+            return score;
+          }
+        default:
+          return score * set_size;
+      }
     }
 
   module.exports = utils;
