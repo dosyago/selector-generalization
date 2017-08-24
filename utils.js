@@ -8,6 +8,20 @@
     'geometry'
   ];
 
+  const score2 = {
+    tags: 1.0,
+    geometry: 0.8,
+    ids: 2.0,
+    classes: 0.5
+  }
+
+  const score = {
+    tags: 1.0,
+    geometry: 0.5,
+    ids: 2.0,
+    classes: 0.333
+  }
+
   const utils = {
     get_code(o) {
       return o.code;
@@ -45,7 +59,7 @@
       }, {});
     }
     ,order(dic) {
-      return slots.reduce( (a, s) => a + dic[s].size, 0 );
+      return slots.reduce( (a, s) => a + (score[s] * dic[s].size), 0 );
     }
   };
 
