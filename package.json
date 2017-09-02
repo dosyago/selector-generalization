@@ -1,6 +1,6 @@
 {
   "name": "selector-generalization",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "JavaScript utils to generalize a set of CSS selectors to a single selector that matches them all. Useful for mapping the structure of web apps.",
   "main": "lib.js",
   "scripts": {
