@@ -21,6 +21,12 @@
 {
   const utils = require('./utils.js');
   const MAX_DEPTH = 10000;
+  const CLASS_MATCHER = /(\.\w+)/g;
+  const ID_MATCHER = /#(\w+)/g;
+  const TAG_MATCHER = /^(\w+)/g;
+  const ANY_MATCHER = /:\w+\(\s*([^\)]+)\s*\)/g;
+  const NTH_MATCHER = /(:nth-of-type\([^)]*\))/g;
+
   let vendor;
   let current_code = 2;
   
@@ -106,10 +112,57 @@
         }
         node = node.parentNode;
       }      
-      canonical_path.unshift({});
       return {canonical:canonical_path};
     },
+    path_from_sel(sel) {
+      const levels = sel.split(/\s*>\s*/g);
+      const path = [];
+      let code = next_code();
+      for( const level of levels ) {
+        const canonical_level = {
+          tags: new Set(),
+          geometry: new Set(),
+          classes: new Set(),
+          ids: new Set()
+        };
+
+        const classes = new Set( run_match(CLASS_MATCHER,level));
+        let anys = run_match(ANY_MATCHER,level)[0];
+        if ( anys ) {
+          anys = new Set( anys.split(/\s*,\s*/g) );
+        } else {
+          anys = new Set();
+        }
+
+        const tag = run_match(TAG_MATCHER,level)[0];
+        const id = run_match(ID_MATCHER,level)[0];
+        const geometry = run_match(NTH_MATCHER,level)[0];
+
+        canonical_level.classes = classes;
+        canonical_level.tags = anys;
+
+        if ( tag ) {
+          if ( anys.size == 0 ) {
+            canonical_level.tags.add( tag );
+          } else if ( tag !== '*' ) {
+            canonical_level.tags.add( tag );
+          }
+        }
+        if ( id ) {
+          canonical_level.ids.add(id);
+        }
+        if ( geometry ) {
+          canonical_level.geometry.add(geometry);
+        }
+
+        canonical_level.code = code;
+        code -= 1;
+        path.push( canonical_level );
+      }
+      return path;
+    },
     selector_from_canonical_path(path) {
+      console.log(path);
       vendor = vendor || require('./vendor.js').get_prefix();
       path = Array.from(path);
       console.log(path);
@@ -138,6 +191,7 @@
           return;
         }
         const { tags, classes, ids, geometry } = levelset;
+        console.log(tags,classes,ids,geometry, levelset);
         let level_sel = '';
         
         if ( path_lcs.any_mode && tags.size > 1 ) {
@@ -184,6 +238,14 @@
   };
 
   // helpers 
+    function run_match(R,s) {
+      const m = [];
+      let match;
+      while(match = R.exec(s)) {
+        m.push(match[1]);
+      }
+      return m;
+    }
     function find_max_value_index(s,x,y) {
       let value = 0;
       let max_index = s.length-1;
