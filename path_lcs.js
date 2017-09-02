@@ -21,7 +21,7 @@
 {
   const utils = require('./utils.js');
   const MAX_DEPTH = 10000;
-  const CLASS_MATCHER = /\.(\w+)/g;
+  const CLASS_MATCHER = /(\.\w+)/g;
   const ID_MATCHER = /#(\w+)/g;
   const TAG_MATCHER = /^(\w+)/g;
   const ANY_MATCHER = /:\w+\(\s*([^\)]+)\s*\)/g;
@@ -117,6 +117,7 @@
     path_from_sel(sel) {
       const levels = sel.split(/\s*>\s*/g);
       const path = [];
+      let code = next_code();
       for( const level of levels ) {
         const canonical_level = {
           tags: new Set(),
@@ -154,7 +155,8 @@
           canonical_level.geometry.add(geometry);
         }
 
-        console.log("CL",canonical_level);
+        canonical_level.code = code;
+        code -= 1;
         path.push( canonical_level );
       }
       return path;

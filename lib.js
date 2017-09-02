@@ -17,7 +17,6 @@
     }
 
     function run_mlcs( p_sels, n_sels, isCanonical = false ) {
-      console.log( p_sels, n_sels );
       let p_paths, n_paths;
       if ( !isCanonical ) {
         const p_els = p_sels.map( sel => isEl( sel ) ? sel : document.querySelector(sel) );

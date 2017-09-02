@@ -136,8 +136,8 @@
     const pl = require('./path_lcs.js');
     const p_can = [...set].map( el => pl.selector_from_canonical_path( pl.get_canonical_path(el).canonical ) );
     const n_can = [...neg_set].map( el => pl.selector_from_canonical_path( pl.get_canonical_path(el).canonical ) );
-    //const {positive,negative} = sg.generalize( p_can, n_can, true);
-    const {positive,negative} = sg.generalize( [...set], [...neg_set], false);
+    const {positive,negative} = sg.generalize( p_can, n_can, true);
+    //const {positive,negative} = sg.generalize( [...set], [...neg_set], false);
     generalized_selector.innerText = `${positive} !(${negative})` || 'n/a';
 
     found.forEach( el => {
