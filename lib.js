@@ -3,6 +3,7 @@
   const path_lcs = require('./path_lcs.js');
   const sg = {
     generalize, 
+    get_canonical_sel,
     set any_mode( mode ) {
       path_lcs.any_mode = mode;
     }
@@ -31,6 +32,10 @@
       const n_basic = path_lcs.basic_multiple_lcs_from_canonical_path_list( n_paths );
       return { p_basic, n_basic };
     }
+
+  function get_canonical_sel( node ) {
+    return path_lcs.selector_from_canonical_path(path_lcs.get_canonical_path(node).canonical);
+  }
 
   function generalize( p_sels, n_sels, isCanonical ) {
     const mlcs_path = run_mlcs( p_sels, n_sels, isCanonical );

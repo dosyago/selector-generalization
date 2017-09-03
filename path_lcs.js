@@ -162,10 +162,8 @@
       return path;
     },
     selector_from_canonical_path(path) {
-      console.log(path);
       vendor = vendor || require('./vendor.js').get_prefix();
       path = Array.from(path);
-      console.log(path);
       if ( path.length == 0 ) {
         return '';
       }
@@ -191,7 +189,6 @@
           return;
         }
         const { tags, classes, ids, geometry } = levelset;
-        console.log(tags,classes,ids,geometry, levelset);
         let level_sel = '';
         
         if ( path_lcs.any_mode && tags.size > 1 ) {

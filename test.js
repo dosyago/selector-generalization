@@ -133,10 +133,14 @@
   }
 
   function gen( set, neg_set, found ) {
-    const pl = require('./path_lcs.js');
-    const p_can = [...set].map( el => pl.selector_from_canonical_path( pl.get_canonical_path(el).canonical ) );
-    const n_can = [...neg_set].map( el => pl.selector_from_canonical_path( pl.get_canonical_path(el).canonical ) );
+    const p_can = [...set].map( el => sg.get_canonical_sel(el) );
+    const n_can = [...neg_set].map( el => sg.get_canonical_sel(el) );
     const {positive,negative} = sg.generalize( p_can, n_can, true);
+    // NOTE 
+      //currently testing with canonical selectors instead of paths
+      // meaning we converted from node -> path -> selector and back to -> path again
+      // meaning we can easily transport these in CSS selector string format 
+      // nice ! 
     //const {positive,negative} = sg.generalize( [...set], [...neg_set], false);
     generalized_selector.innerText = `${positive} !(${negative})` || 'n/a';
 
