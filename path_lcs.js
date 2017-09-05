@@ -198,11 +198,11 @@
         }
 
         if ( ids.size ) {
-          level_sel += `#${[...ids.map(i => safe(i))].join('#')}`;
+          level_sel += `#${[...ids].map(i => safe(i)).join('#')}`;
         }
 
         if ( classes.size) {
-          level_sel += `${[...classes.map(c => safe(c))].join('')}`;
+          level_sel += `${[...classes].map(c => safe(c)).join('')}`;
         }
 
         if ( geometry.size ) {
