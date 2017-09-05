@@ -21,9 +21,9 @@
 {
   const utils = require('./utils.js');
   const MAX_DEPTH = 10000;
-  const CLASS_MATCHER = /(\.\w+)/g;
-  const ID_MATCHER = /#(\w+)/g;
-  const TAG_MATCHER = /^(\w+)/g;
+  const CLASS_MATCHER = /(\.[^#\.:]+)/g;
+  const ID_MATCHER = /#([^#\.:]+)/g;
+  const TAG_MATCHER = /^([^#\.:]+)/g;
   const ANY_MATCHER = /:\w+\(\s*([^\)]+)\s*\)/g;
   const NTH_MATCHER = /(:nth-of-type\([^)]*\))/g;
 
