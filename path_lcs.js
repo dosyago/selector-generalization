@@ -95,7 +95,7 @@
             // add class words to canonical_level 
               classes.forEach( classword => {
                 if(classword.length > 0) {
-                  canonical_level.classes.add(`.${classword}`);
+                  canonical_level.classes.add(`.${safe(classword)}`);
                 }
               });
 
@@ -126,7 +126,7 @@
           ids: new Set()
         };
 
-        const classes = new Set( run_match(CLASS_MATCHER,level));
+        const classes = new Set( run_match(CLASS_MATCHER,level).map( c => safe(c) ));
         let anys = run_match(ANY_MATCHER,level)[0];
         if ( anys ) {
           anys = new Set( anys.split(/\s*,\s*/g) );
@@ -135,7 +135,7 @@
         }
 
         const tag = run_match(TAG_MATCHER,level)[0];
-        const id = run_match(ID_MATCHER,level)[0];
+        const id = safe(run_match(ID_MATCHER,level)[0]);
         const geometry = run_match(NTH_MATCHER,level)[0];
 
         canonical_level.classes = classes;
@@ -149,7 +149,7 @@
           }
         }
         if ( id ) {
-          canonical_level.ids.add(id);
+          canonical_level.ids.add(safe(id));
         }
         if ( geometry ) {
           canonical_level.geometry.add(geometry);
@@ -235,6 +235,10 @@
   };
 
   // helpers 
+    function safe(s) {
+      // CSS escapes
+      return s.replace(/\\\\([\[\]])/, '$1' ).replace(/([\[\]])/g, '\\$1' );
+    }
     function run_match(R,s) {
       const m = [];
       let match;
