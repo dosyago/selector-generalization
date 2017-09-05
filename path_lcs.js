@@ -135,7 +135,7 @@
         }
 
         const tag = run_match(TAG_MATCHER,level)[0];
-        const id = safe(run_match(ID_MATCHER,level)[0]);
+        const id = safe(run_match(ID_MATCHER,level)[0] || '');
         const geometry = run_match(NTH_MATCHER,level)[0];
 
         canonical_level.classes = classes;
@@ -149,7 +149,7 @@
           }
         }
         if ( id ) {
-          canonical_level.ids.add(safe(id));
+          canonical_level.ids.add(id);
         }
         if ( geometry ) {
           canonical_level.geometry.add(geometry);
@@ -198,11 +198,11 @@
         }
 
         if ( ids.size ) {
-          level_sel += `#${[...ids].join('##')}`;
+          level_sel += `#${[...ids.map(i => safe(i))].join('#')}`;
         }
 
         if ( classes.size) {
-          level_sel += `${[...classes].join('')}`;
+          level_sel += `${[...classes.map(c => safe(c))].join('')}`;
         }
 
         if ( geometry.size ) {
