@@ -237,7 +237,12 @@
   // helpers 
     function safe(s) {
       // CSS escapes
-      return s.replace(/\\\\([\[\]])/, '$1' ).replace(/([\[\]])/g, '\\$1' );
+      if ( Number.isInteger(parseInt(s)) && parseInt(s).toString() == s) {
+        s = s.split('').map( c => c.charCodeAt(0).toString(16) ).join('\\');
+        return '\\'+s;
+      } else {
+        return s.replace(/\\\\([\[\]])/, '$1' ).replace(/([\[\]])/g, '\\$1' ).replace(/\\(\d\d)/g,'\\\\$1');
+      }
     }
     function run_match(R,s) {
       const m = [];
