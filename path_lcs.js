@@ -271,7 +271,7 @@
     }
 
     function lcs_read(s,x,y,i,j) {
-      if ( i <= 0 || j <= 0 ) {
+      if ( i < 0 || j < 0 ) {
         return [];
       }
       
@@ -334,8 +334,8 @@
       let address;
       let path1_path2_match_score, path1_insert_score, path2_insert_score;
       
-      for(i1 = 1; i1 < path1.length; i1 += 1 ) {
-        for(i2 = 1; i2 < path2.length; i2 += 1 ) {
+      for(i1 = 0; i1 < path1.length; i1 += 1 ) {
+        for(i2 = 0; i2 < path2.length; i2 += 1 ) {
           const union_order = utils.order(utils.union(path1[i1],path2[i2]), path_lcs.any_mode);
           let quotient = 0;
           if ( union_order ) {
