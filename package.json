@@ -1,15 +1,68 @@
 {
-  "name": "selector-generalization",
-  "version": "1.1.6",
+  "_args": [
+    [
+      {
+        "raw": "selector-generalization@^1.1.6",
+        "scope": null,
+        "escapedName": "selector-generalization",
+        "name": "selector-generalization",
+        "rawSpec": "^1.1.6",
+        "spec": ">=1.1.6 <2.0.0",
+        "type": "range"
+      },
+      "/home/criscanbereached/projectant/pa-os-desktopclient"
+    ]
+  ],
+  "_from": "selector-generalization@>=1.1.6 <2.0.0",
+  "_id": "selector-generalization@1.1.6",
+  "_inCache": true,
+  "_location": "/selector-generalization",
+  "_nodeVersion": "8.2.1",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/selector-generalization-1.1.6.tgz_1504778601002_0.03806215524673462"
+  },
+  "_npmUser": {
+    "name": "dosy",
+    "email": "writetocris@outlook.com"
+  },
+  "_npmVersion": "5.3.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "selector-generalization@^1.1.6",
+    "scope": null,
+    "escapedName": "selector-generalization",
+    "name": "selector-generalization",
+    "rawSpec": "^1.1.6",
+    "spec": ">=1.1.6 <2.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/selector-generalization/-/selector-generalization-1.1.6.tgz",
+  "_shasum": "dc34491011a241478b685307a054296a167edc89",
+  "_shrinkwrap": null,
+  "_spec": "selector-generalization@^1.1.6",
+  "_where": "/home/criscanbereached/projectant/pa-os-desktopclient",
+  "author": {
+    "name": "Cris @ dosy",
+    "email": "criscanbereached@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/dosyago-coder-0/selector-generalization/issues"
+  },
+  "dependencies": {},
   "description": "JavaScript utils to generalize a set of CSS selectors to a single selector that matches them all. Useful for mapping the structure of web apps.",
-  "main": "lib.js",
-  "scripts": {
-    "test": "beefy test.js 8080"
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "integrity": "sha512-JQkBhISalBeGD4iCeQh19jd5LjusXizeO6/1Wr4O8UNW54bqgAf+qhUGpxVyHi8unrwWb8Iii+aERi1ck4QiEA==",
+    "shasum": "dc34491011a241478b685307a054296a167edc89",
+    "tarball": "https://registry.npmjs.org/selector-generalization/-/selector-generalization-1.1.6.tgz"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dosyago-coder-0/selector-generalization.git"
-  },
+  "gitHead": "fe27c4463df12819321dbfcfeaf08879d8e0ae1a",
+  "homepage": "https://github.com/dosyago-coder-0/selector-generalization#readme",
   "keywords": [
     "css-selector",
     "css-selector-generalization",
@@ -19,10 +72,23 @@
     "mapping",
     "journeys"
   ],
-  "author": "Cris @ dosy <criscanbereached@gmail.com>",
   "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/dosyago-coder-0/selector-generalization/issues"
+  "main": "lib.js",
+  "maintainers": [
+    {
+      "name": "dosy",
+      "email": "criscanbereached@gmail.com"
+    }
+  ],
+  "name": "selector-generalization",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dosyago-coder-0/selector-generalization.git"
   },
-  "homepage": "https://github.com/dosyago-coder-0/selector-generalization#readme"
+  "scripts": {
+    "test": "beefy test.js 8080"
+  },
+  "version": "1.1.6"
 }

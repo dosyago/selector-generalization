@@ -161,6 +161,11 @@
       }
       return path;
     },
+    lcs_from_canonical_sel_pair(sel1,sel2) {
+      const path1 = path_lcs.path_from_sel(sel1);
+      const path2 = path_lcs.path_from_sel(sel2);
+      return lcs_from_canonical_path_pair(path1,path2).value;
+    },
     selector_from_canonical_path(path) {
       vendor = vendor || require('./vendor.js').get_prefix();
       path = Array.from(path);

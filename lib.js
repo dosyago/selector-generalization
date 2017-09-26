@@ -3,7 +3,9 @@
   const path_lcs = require('./path_lcs.js');
   const sg = {
     generalize, 
+    lcs_from_sel_pair: path_lcs.lcs_from_canonical_sel_pair,
     get_canonical_sel,
+    sel_from_path: path_lcs.selector_from_canonical_path,
     set any_mode( mode ) {
       path_lcs.any_mode = mode;
     }
