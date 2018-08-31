@@ -1,6 +1,8 @@
 # selector-generalization
 
-JavaScript utils to generalize a set of CSS selectors to a single selector that matches them all. Useful for mapping the structure of web apps.
+JavaScript utils to generalize a set of CSS selectors to a single selector that matches them all. Useful for mapping the structure of web apps. 
+
+I developed this algorithm in 2013 but only recently open sourced it.
 
 ## running the test
 
