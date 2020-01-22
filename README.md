@@ -1,4 +1,4 @@
-# selector-generalization
+# :mag: [selector-generalization](https://github.com/crislin2046/selector-generalization) [![version](https://img.shields.io/npm/v/selector-generalization.svg?label=&color=0080FF)](https://github.com/crislin2046/selector-generalization/releases/latest) ![npm downloads](https://img.shields.io/npm/dt/selector-generalization)
 
 JavaScript utils to generalize a set of CSS selectors to a single selector that matches them all. Useful for mapping the structure of web apps. 
 
