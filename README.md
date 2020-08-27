@@ -26,6 +26,9 @@ If you notice something weird, open an issue! :thumbsup:
 
 ## Dev Notes
 
+- *Thursday August 27 2020* 
+ - Updated packaging and test scripts
+ - Pushed live test demo to a github site
 - *Wednesday August 16 2017*
  - All the current open issues are improvements. Some of improvements to `:any` and others are just improvements.
  - None of these currently can be done because:
