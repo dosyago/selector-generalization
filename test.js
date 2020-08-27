@@ -71,12 +71,15 @@
         show_result( set, neg_set, found );
       } else if ( e.target.id == 'clear' ) {
         Array.from( set ).forEach( el => {
+          if ( el.closest('#testcontrols') ) return;
           el.style.outline = "none";
         });
         Array.from( neg_set ).forEach( el => {
+          if ( el.closest('#testcontrols') ) return;
           el.style.outline = "none";
         });
         found.forEach( el => {
+          if ( el.closest('#testcontrols') ) return;
           el.style.filter = "none";
           el.style.background = "none";
         });
@@ -91,6 +94,7 @@
         if ( !( e.target instanceof HTMLElement ) || e.target.matches( 'article#testcontrols, article#testcontrols *' ) ) {
           return;
         }
+        if ( e.target.closest('#testcontrols') ) return;
         if ( negate.checked ) {
           if ( set.has( e.target ) ) {
             set.delete( e.target );
@@ -121,12 +125,15 @@
   
   function show_result( set, neg_set, found ) {
     Array.from( set ).forEach( el => {
+      if ( el.closest('#testcontrols') ) return;
       el.style.outline = "3px dashed lime";
     });
     Array.from( neg_set ).forEach( el => {
+      if ( el.closest('#testcontrols') ) return;
       el.style.outline = "3px dashed red";
     });
     found.forEach( el => {
+      if ( el.closest('#testcontrols') ) return;
       el.style.filter = "sepia(1)";
       el.style.background = "lime";
     });
