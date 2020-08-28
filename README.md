@@ -4,7 +4,7 @@ JavaScript utils to generalize a set of CSS selectors to a single selector that 
 
 I developed this algorithm in 2013 but only recently open sourced it.
 
-Live demo: [https://cris691.github.io/selector-generalization/](https://cris691.github.io/selector-generalization/)
+[Live demo: https://cris691.github.io/selector-generalization/](https://cris691.github.io/selector-generalization/)
 
 ## running the test
 
