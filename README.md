@@ -4,7 +4,7 @@ JavaScript utils to generalize a set of CSS selectors to a single selector that 
 
 I developed this algorithm in 2013 but only recently open sourced it. It's based on using a sequence alignment algorithm from bioinformatics or string processing on sequences of objects (CSS selectors), with a "fuzzy" matching (set similarity instead of exact string matching).
 
-[Live demo: https://cris691.github.io/selector-generalization/](https://cris691.github.io/selector-generalization/)
+[Live demo: https://i5ik.github.io/selector-generalization/](https://i5ik.github.io/selector-generalization/)
 
 ## running the test
 
