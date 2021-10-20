@@ -14,7 +14,6 @@
     ]
   ],
   "_from": "selector-generalization@>=1.1.6 <2.0.0",
-  "_id": "selector-generalization@1.1.6",
   "_inCache": true,
   "_location": "/selector-generalization",
   "_nodeVersion": "8.2.1",
@@ -94,5 +93,5 @@
     "build": "npx webpack ./test.js",
     "prepublishOnly": "npm run build"
   },
-  "version": "1.1.7"
+  "version": "1.2.0"
 }
