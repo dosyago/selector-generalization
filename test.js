@@ -37,18 +37,23 @@
     const neg_set = new Set();
     const set = new Set();
     let found = [];
+    sg.any_mode = document.querySelector('#any_mode').checked;
     document.addEventListener('click', e => {
       if ( e.target.id == 'negate' ) {
         found.forEach( el => {
           el.style.filter = "none";
           el.style.background = "none";
+          el.style.outline = "none";
         });
-      } else if ( e.target.id == 'any_mode' ) {
-        sg.any_mode = e.target.checked;
       } else {
         if ( navigable.has( e.target.tagName ) ) {
           e.preventDefault();
         }
+      }
+    });
+    document.addEventListener('input', e => {
+      if ( e.target.id === 'any_mode' ) {
+        sg.any_mode = e.target.checked;
       }
     });
     document.addEventListener('mouseup', e => {
@@ -82,6 +87,7 @@
           if ( el.closest('#testcontrols') ) return;
           el.style.filter = "none";
           el.style.background = "none";
+          el.style.outline = "none";
         });
         neg_set.clear();
         set.clear();
@@ -133,7 +139,9 @@
       el.style.outline = "3px dashed red";
     });
     found.forEach( el => {
+      console.log(el);
       if ( el.closest('#testcontrols') ) return;
+      el.style.outline = "3px dashed lime";
       el.style.filter = "sepia(1)";
       el.style.background = "lime";
     });
@@ -154,6 +162,7 @@
     found.forEach( el => {
       el.style.filter = "none";
       el.style.background = "none";
+      el.style.outline = "none";
     });
 
     try { 
@@ -161,7 +170,7 @@
       found.push( ... Array.from( document.querySelectorAll(positive) ) );
     } catch(e) {
       console.warn(" Error on query selector", e );
-      console.warn("Note, MS Edge and IE do not support ':matches' or ':any' as of the time I wrote this code, August 16 2017");
+      console.warn("Note, MS Edge and IE do not support ':matches' or ':any' or ':is' as of the time I wrote this code, August 16 2017");
     }
 
     if ( !!negative ) {

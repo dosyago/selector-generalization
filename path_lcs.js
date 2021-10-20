@@ -1,6 +1,6 @@
 /**
 
-   Copyright 2013-2017 Cris Stringfellow / DOSAYGO CREATIVE INTANGIBLE HOLDINGS (UK) LTD
+   Copyright 2013-2017 Cris Stringfellow / DOSAYGO CORPORATION
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@
   const ANY_MATCHER = /:\w+\(\s*([^\)]+)\s*\)/g;
   const NTH_MATCHER = /(:nth-of-type\([^)]*\))/g;
 
-  let vendor;
   let current_code = 2;
   
   const path_lcs = {
@@ -167,7 +166,6 @@
       return lcs_from_canonical_path_pair(path1,path2).value;
     },
     selector_from_canonical_path(path) {
-      vendor = vendor || require('./vendor.js').get_prefix();
       path = Array.from(path);
       if ( path.length == 0 ) {
         return '';
@@ -197,7 +195,7 @@
         let level_sel = '';
         
         if ( path_lcs.any_mode && tags.size > 1 ) {
-          level_sel += `:-${vendor}-any(${[...tags].join(',')})`;
+          level_sel += `:is(${[...tags].join(',')})`;
         } else {
           level_sel += `${[...tags].join(',')}`;
         }

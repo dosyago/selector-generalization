@@ -1,6 +1,5 @@
 "use strict";
 {
-  let vendor;
   const slots = [
     'tags',
     'ids',
@@ -27,7 +26,6 @@
       return o.code;
     }
     ,get_tag_or_any(e,o) {
-      vendor = vendor || require('./vendor.js').get_prefix();
       const eset = new Set(e.split(/\s*,\s*/g));
       const tags = o.tags;
       if ( o.tags.size ) {

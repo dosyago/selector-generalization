@@ -90,8 +90,9 @@
     "url": "git+https://github.com/dosyago-coder-0/selector-generalization.git"
   },
   "scripts": {
-    "test": "serve -p 8080",
-    "build": "npx webpack test.js"
+    "test": "watch -n 5 'npm run build'& npx serve -p 8080",
+    "build": "npx webpack ./test.js",
+    "prepublishOnly": "npm run build"
   },
   "version": "1.1.7"
 }
