@@ -52,14 +52,13 @@
   "bugs": {
     "url": "https://github.com/dosyago-coder-0/selector-generalization/issues"
   },
-  "dependencies": {},
   "description": "JavaScript utils to generalize a set of CSS selectors to a single selector that matches them all. Useful for mapping the structure of web apps.",
   "devDependencies": {
-    "beefy": "^2.1.8",
-    "browserify": "^16.5.2",
-    "serve": "^11.3.2",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "beefy": "latest",
+    "browserify": "latest",
+    "serve": "latest",
+    "webpack": "latest",
+    "webpack-cli": "latest"
   },
   "directories": {},
   "dist": {
@@ -87,7 +86,6 @@
     }
   ],
   "name": "selector-generalization",
-  "optionalDependencies": {},
   "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
