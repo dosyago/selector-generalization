@@ -54,8 +54,7 @@
   },
   "description": "JavaScript utils to generalize a set of CSS selectors to a single selector that matches them all. Useful for mapping the structure of web apps.",
   "devDependencies": {
-    "browserify": "latest",
-    "serve": "latest",
+    "serve": "^12.0.1",
     "webpack": "latest",
     "webpack-cli": "latest"
   },
@@ -91,7 +90,6 @@
     "url": "git+https://github.com/dosyago-coder-0/selector-generalization.git"
   },
   "scripts": {
-    "old-test": "beefy test.js 8080",
     "test": "serve -p 8080",
     "build": "npx webpack test.js"
   },
